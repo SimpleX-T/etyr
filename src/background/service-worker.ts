@@ -19,12 +19,17 @@ import {
   savedWordsToJSON,
   savedWordsToCSV,
   parseImportedWords,
+  updateWordSrs,
 } from '../storage/bookmarks';
 import {
   addHistoryEntry,
   getRecentHistory,
   clearHistory,
 } from '../storage/history';
+import {
+  getStats,
+  recordReviewActivity,
+} from '../storage/stats';
 import { getSettings, updateSettings } from '../storage/settings';
 import {
   isSiteExcluded,
@@ -137,11 +142,14 @@ const handlers: Partial<Record<MessageAction, MessageHandler>> = {
   },
 
   [MESSAGE_ACTIONS.BOOKMARK_SAVE]: async (payload) => {
-    const result = unwrap(payload).result as DictionaryResult | undefined;
+    const un = unwrap(payload);
+    const result = un.result as DictionaryResult | undefined;
+    const context = asString(un.context);
+    
     if (!result || typeof result.word !== 'string' || !Array.isArray(result.meanings)) {
       throw new RouteError('INVALID_PAYLOAD', 'Field "result" (DictionaryResult) is required');
     }
-    return saveWord(result);
+    return saveWord(result, context);
   },
 
   [MESSAGE_ACTIONS.BOOKMARK_IS_SAVED]: async (payload) => {
@@ -310,6 +318,34 @@ const handlers: Partial<Record<MessageAction, MessageHandler>> = {
       throw new RouteError('SPEECH_UNAVAILABLE', 'Speech synthesis is not available');
     }
     return { played: true };
+  },
+
+  [MESSAGE_ACTIONS.STATS_GET]: async () => {
+    return getStats();
+  },
+
+  [MESSAGE_ACTIONS.STATS_RECORD_REVIEW]: async (payload) => {
+    const p = unwrap(payload);
+    const id = asString(p.id);
+    const rating = typeof p.rating === 'number' ? p.rating : 0; // 0=hard, 1=good, 2=easy
+    
+    if (!id) throw new RouteError('INVALID_PAYLOAD', 'Field "id" is required');
+
+    // Calculate next review based on simplified SM-2 logic
+    const now = Date.now();
+    let nextDate = now;
+    let newLevel = rating > 0 ? (typeof p.currentLevel === 'number' ? p.currentLevel : 0) + rating : 0;
+    
+    // Convert newLevel to time interval
+    if (newLevel === 0) nextDate = now + 1000 * 60 * 60 * 24; // 1 day
+    else if (newLevel === 1) nextDate = now + 1000 * 60 * 60 * 24 * 3; // 3 days
+    else if (newLevel === 2) nextDate = now + 1000 * 60 * 60 * 24 * 7; // 1 week
+    else if (newLevel === 3) nextDate = now + 1000 * 60 * 60 * 24 * 14; // 2 weeks
+    else if (newLevel === 4) nextDate = now + 1000 * 60 * 60 * 24 * 30; // 1 month
+    else nextDate = now + 1000 * 60 * 60 * 24 * 60; // 2 months
+    
+    await updateWordSrs(id, newLevel, nextDate);
+    return recordReviewActivity();
   },
 };
 

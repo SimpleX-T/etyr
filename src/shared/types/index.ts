@@ -47,6 +47,9 @@ export interface SavedWord {
   savedAt: number;
   lastViewedAt?: number;
   tags?: string[];
+  context?: string;
+  nextReviewDate?: number;
+  reviewLevel?: number; // 0 to 5 for SRS
 }
 
 export interface HistoryEntry {
@@ -60,6 +63,12 @@ export interface HistoryEntry {
   source: DictionarySource;
 }
 
+export interface Stats {
+  streakDays: number;
+  lastReviewDate: number;
+  wordsReviewedToday: number;
+}
+
 export interface Settings {
   autoLookup: boolean;
   triggerKey: 'none' | 'alt' | 'ctrl' | 'shift' | 'meta';
@@ -71,6 +80,8 @@ export interface Settings {
   aiProvider: 'none' | 'gemini' | 'huggingface';
   aiApiKey: string;
   aiModel: string;
+  autoPlayPronunciation: boolean;
+  enableNewTab: boolean;
 }
 
 export interface ExclusionEntry {
@@ -102,7 +113,9 @@ export type MessageAction =
   | 'IMPORT_SAVED'
   | 'SAVED_CLEAR'
   | 'CONTENT_INIT'
-  | 'PRONUNCIATION_SPEAK';
+  | 'PRONUNCIATION_SPEAK'
+  | 'STATS_GET'
+  | 'STATS_RECORD_REVIEW';
 
 export interface MessageRequest {
   action: MessageAction;
@@ -125,6 +138,7 @@ export interface SelectionSnapshot {
   range: Range;
   timestamp: number;
   requestId: string;
+  context?: string;
 }
 
 export type TooltipState =

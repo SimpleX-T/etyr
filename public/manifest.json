@@ -29,6 +29,9 @@
       "run_at": "document_idle"
     }
   ],
+  "chrome_url_overrides": {
+    "newtab": "src/newtab/index.html"
+  },
   "options_page": "src/options/index.html",
   "permissions": ["storage"],
   "host_permissions": [

@@ -432,8 +432,23 @@
 
 :host .etyr-tooltip__footer {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 24px;
+}
+
+:host .etyr-tooltip__translate {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+:host .etyr-tooltip__translate:hover {
+  color: rgba(255, 255, 255, 1);
 }
 
 :host .etyr-tooltip__disable {
@@ -543,6 +558,14 @@
   background: rgba(0, 0, 0, 0.04);
   color: #000000;
   border-color: rgba(0, 0, 0, 0.3);
+}
+
+:host([data-etyr-theme='light']) .etyr-tooltip__translate {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+:host([data-etyr-theme='light']) .etyr-tooltip__translate:hover {
+  color: rgba(0, 0, 0, 0.9);
 }
 
 :host([data-etyr-theme='light']) .etyr-tooltip__disable {

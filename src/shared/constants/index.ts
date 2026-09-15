@@ -21,6 +21,8 @@ export const DEFAULT_SETTINGS: Settings = {
   aiProvider: 'huggingface',
   aiApiKey: '',
   aiModel: 'meta-llama/Llama-3.2-3B-Instruct',
+  autoPlayPronunciation: false,
+  enableNewTab: true,
 };
 
 export const DICTIONARY_API_BASE = 'https://freedictionaryapi.com/api/v1/entries/en';
@@ -45,6 +47,8 @@ export const MESSAGE_ACTIONS = {
   SAVED_CLEAR: 'SAVED_CLEAR' as const,
   CONTENT_INIT: 'CONTENT_INIT' as const,
   PRONUNCIATION_SPEAK: 'PRONUNCIATION_SPEAK' as const,
+  STATS_GET: 'STATS_GET' as const,
+  STATS_RECORD_REVIEW: 'STATS_RECORD_REVIEW' as const,
 } as const;
 
 export const STORAGE_KEYS = {
@@ -53,6 +57,7 @@ export const STORAGE_KEYS = {
   SAVED_WORDS: 'etyr_saved_words',
   LOOKUP_HISTORY: 'etyr_lookup_history',
   DICTIONARY_CACHE: 'etyr_dictionary_cache',
+  STATS: 'etyr_stats',
 } as const;
 
 export const PUNCTUATION_REGEX = /^[^\w]+$/;

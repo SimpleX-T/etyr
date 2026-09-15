@@ -29,6 +29,7 @@ export default defineConfig({
       input: {
         popup: resolve(__dirname, 'src/popup/index.html'),
         options: resolve(__dirname, 'src/options/index.html'),
+        newtab: resolve(__dirname, 'src/newtab/index.html'),
         background: resolve(__dirname, 'src/background/service-worker.ts'),
       },
       output: {

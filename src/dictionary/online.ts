@@ -85,6 +85,10 @@ export class OnlineDictionaryProvider implements DictionaryProvider {
       throw new OnlineDictionaryError('MALFORMED_RESPONSE', 'Malformed response from dictionary API');
     }
 
+    if (!data.entries || data.entries.length === 0) {
+      throw new OnlineDictionaryError('NOT_FOUND', `No results for "${normalized}"`, 404);
+    }
+
     return normalizeOnlineResponse(data, normalized, 'online');
   }
 }

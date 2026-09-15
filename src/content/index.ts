@@ -23,6 +23,8 @@ export class EtyrContent {
   private aborted = false;
   private lookupTimer: number | null = null;
   private currentResult: DictionaryResult | null = null;
+  private currentSnapshot: SelectionSnapshot | null = null;
+  private settings: Settings = DEFAULT_SETTINGS;
   private pronunciationService = new PronunciationService();
 
   private readonly onKeyDown = (event: KeyboardEvent): void => {
@@ -73,6 +75,7 @@ export class EtyrContent {
     }
 
     const effective = settings ?? DEFAULT_SETTINGS;
+    this.settings = effective;
 
     this.detector = new SelectionDetector(effective);
     this.machine = new SelectionStateMachine();
@@ -108,6 +111,7 @@ export class EtyrContent {
     if (areaName === 'local' && changes[STORAGE_KEYS.SETTINGS]) {
       const newSettings = changes[STORAGE_KEYS.SETTINGS].newValue as Settings | undefined;
       if (newSettings) {
+        this.settings = newSettings;
         this.detector?.updateSettings(newSettings);
         if (newSettings.theme) {
           this.applyTheme(newSettings.theme);
@@ -166,6 +170,7 @@ export class EtyrContent {
     }
 
     this.currentResult = null;
+    this.currentSnapshot = snapshot;
     this.clearTimers();
     this.machine.dispatch({ type: 'selection_change', snapshot });
   }
@@ -235,6 +240,9 @@ export class EtyrContent {
       void this.isSaved(result.query).then(saved => {
         if (!this.machine?.isActiveRequestId(requestId)) return;
         this.tooltip?.updateState('showing', result, saved);
+        if (this.settings.autoPlayPronunciation) {
+          void this.speakCurrent();
+        }
       });
     } else {
       this.machine.dispatch({ type: 'resolve_error' });
@@ -268,7 +276,7 @@ export class EtyrContent {
     } else {
       const response = await this.sendMessage<boolean>({
         action: MESSAGE_ACTIONS.BOOKMARK_SAVE,
-        payload: { result },
+        payload: { result, context: this.currentSnapshot?.context },
       });
       if (response?.ok === true) {
         this.tooltip?.updateState('showing', result, true);

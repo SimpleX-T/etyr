@@ -123,6 +123,15 @@ const canPronounce = Boolean(showPronunciation);
       <div className="etyr-tooltip__body">{content}</div>
 
       <div className="etyr-tooltip__footer">
+        <a
+          href={`https://translate.google.com/?sl=auto&tl=en&text=${encodeURIComponent(displayWord(query, result))}&op=translate`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="etyr-tooltip__action etyr-tooltip__translate"
+          title="Translate word"
+        >
+          Translate
+        </a>
         <button
           type="button"
           className="etyr-tooltip__disable"
@@ -131,7 +140,7 @@ const canPronounce = Boolean(showPronunciation);
           onClick={onDisableSite}
         >
           <BanIcon size={12} ariaHidden={true} />
-          <span>Disable on this site</span>
+          <span>Disable</span>
         </button>
       </div>
     </div>

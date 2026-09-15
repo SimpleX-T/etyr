@@ -657,3 +657,190 @@ ul {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 242, 224, 0.2);
 }
+
+/* ------------------------------------------------------------------ */
+/*  Vocab Builder                                                      */
+/* ------------------------------------------------------------------ */
+
+.vocab-page.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.vocab-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.stat-pill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--etyr-surface);
+  border: 1px solid var(--etyr-border);
+  border-radius: var(--etyr-radius);
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--etyr-text);
+}
+
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--etyr-text-muted);
+  letter-spacing: 0.5px;
+}
+
+.vocab-progress {
+  font-size: 11px;
+  color: var(--etyr-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.vocab-flashcard {
+  display: flex;
+  flex-direction: column;
+}
+
+.flashcard-front {
+  background: var(--etyr-surface);
+  border: 1px solid var(--etyr-border);
+  border-radius: var(--etyr-radius);
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 16px;
+  box-shadow: var(--etyr-shadow);
+}
+
+.flashcard-word {
+  font-family: var(--etyr-font-serif);
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--etyr-text);
+}
+
+.flashcard-context {
+  font-size: 14px;
+  color: var(--etyr-text-muted);
+  font-style: italic;
+}
+
+.flashcard-no-context {
+  font-size: 12px;
+  color: var(--etyr-text-muted);
+  opacity: 0.5;
+}
+
+.flashcard-reveal-area {
+  display: flex;
+  justify-content: center;
+}
+
+.vocab-btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: var(--etyr-text);
+  color: var(--etyr-bg);
+  border: none;
+  border-radius: var(--etyr-radius);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.vocab-btn-primary:hover {
+  opacity: 0.9;
+}
+
+.vocab-btn-secondary {
+  padding: 8px 16px;
+  background: var(--etyr-surface);
+  color: var(--etyr-text);
+  border: 1px solid var(--etyr-border);
+  border-radius: var(--etyr-radius);
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.flashcard-back {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.flashcard-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.srs-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  border: 1px solid var(--etyr-border);
+  border-radius: var(--etyr-radius);
+  background: var(--etyr-surface);
+  color: var(--etyr-text);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.srs-btn small {
+  font-size: 10px;
+  color: var(--etyr-text-muted);
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+.srs-hard:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+.srs-good:hover {
+  background: rgba(77, 171, 247, 0.1);
+  border-color: rgba(77, 171, 247, 0.3);
+}
+.srs-easy:hover {
+  background: rgba(81, 207, 102, 0.1);
+  border-color: rgba(81, 207, 102, 0.3);
+}
+
+.vocab-finished {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.vocab-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.vocab-text {
+  font-size: 13px;
+  color: var(--etyr-text-muted);
+  margin-bottom: 24px;
+}

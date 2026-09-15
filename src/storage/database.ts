@@ -8,6 +8,7 @@ export interface StorageSchema {
   etyr_saved_words: import('../shared/types').SavedWord[];
   etyr_lookup_history: import('../shared/types').HistoryEntry[];
   etyr_dictionary_cache: Record<string, import('../dictionary/types').CacheEntry>;
+  etyr_stats: import('../shared/types').Stats;
 }
 
 export async function getStorageItem<K extends keyof StorageSchema>(
@@ -37,5 +38,6 @@ export async function getAllStorage(): Promise<Partial<StorageSchema>> {
     'etyr_saved_words',
     'etyr_lookup_history',
     'etyr_dictionary_cache',
+    'etyr_stats',
   ]) as Promise<Partial<StorageSchema>>;
 }

@@ -123,6 +123,19 @@ export class SelectionDetector {
       return;
     }
 
+    // Extract surrounding context (sentence)
+    let context = '';
+    if (anchor && anchor.textContent) {
+      const textContent = anchor.textContent;
+      const offset = selection.anchorOffset;
+      // Get ~75 chars before and after the selection to capture the sentence
+      const start = Math.max(0, offset - 75);
+      const end = Math.min(textContent.length, offset + 75);
+      context = textContent.slice(start, end).trim();
+      if (start > 0) context = '...' + context;
+      if (end < textContent.length) context = context + '...';
+    }
+
     const text = normalizeSelectionText(selection.toString());
     if (!isLookupCandidate(text)) {
       this.emit(null);
@@ -174,6 +187,7 @@ export class SelectionDetector {
       range,
       timestamp: Date.now(),
       requestId: createId(),
+      context,
     };
 
     this.lastSnapshot = snapshot;

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { BookOpen, Home, Bookmark, Settings as SettingsIcon } from 'lucide-react';
+import { BookOpen, Home, Bookmark, Settings as SettingsIcon, Brain } from 'lucide-react';
 import HomePage from './pages/HomePage';
 import SavedPage from './pages/SavedPage';
 import SettingsPage from './pages/SettingsPage';
+import VocabPage from './pages/VocabPage';
 import { getSettings, getThemeClass } from '@storage/settings';
 import { STORAGE_KEYS } from '@shared/constants';
 import { getBrowserAPI } from '@browser/types';
 
-type Page = 'home' | 'saved' | 'settings';
+type Page = 'home' | 'saved' | 'learn' | 'settings';
 
 export default function App() {
   const [page, setPage] = useState<Page>('home');
@@ -61,6 +62,13 @@ export default function App() {
             <Bookmark size={15} />
           </button>
           <button
+            className={`nav-btn${page === 'learn' ? ' active' : ''}`}
+            onClick={() => setPage('learn')}
+            aria-label="Learn"
+          >
+            <Brain size={15} />
+          </button>
+          <button
             className={`nav-btn${page === 'settings' ? ' active' : ''}`}
             onClick={() => setPage('settings')}
             aria-label="Settings"
@@ -73,6 +81,7 @@ export default function App() {
       <main className="app-content">
         {page === 'home' && <HomePage />}
         {page === 'saved' && <SavedPage />}
+        {page === 'learn' && <VocabPage />}
         {page === 'settings' && <SettingsPage />}
       </main>
     </div>

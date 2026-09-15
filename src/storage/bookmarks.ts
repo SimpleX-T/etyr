@@ -18,7 +18,7 @@ export async function getSavedWordId(query: string): Promise<string | undefined>
   return found?.id;
 }
 
-export async function saveWord(result: DictionaryResult): Promise<SavedWord> {
+export async function saveWord(result: DictionaryResult, context?: string): Promise<SavedWord> {
   const words = await getAllSavedWords();
   const existingIndex = words.findIndex(
     w => w.query.toLowerCase() === result.query.toLowerCase()
@@ -41,6 +41,9 @@ export async function saveWord(result: DictionaryResult): Promise<SavedWord> {
     source: result.source,
     savedAt: existingIndex >= 0 ? words[existingIndex].savedAt : Date.now(),
     lastViewedAt: Date.now(),
+    context: context || (existingIndex >= 0 ? words[existingIndex].context : undefined),
+    nextReviewDate: existingIndex >= 0 ? words[existingIndex].nextReviewDate : Date.now(),
+    reviewLevel: existingIndex >= 0 ? words[existingIndex].reviewLevel : 0,
   };
 
   if (existingIndex >= 0) {
@@ -68,6 +71,22 @@ export async function updateLastViewed(id: string): Promise<void> {
   const word = words.find(w => w.id === id);
   if (word) {
     word.lastViewedAt = Date.now();
+    await setStorageItem(STORAGE_KEYS.SAVED_WORDS, words);
+  }
+}
+
+export async function getDueWords(): Promise<SavedWord[]> {
+  const words = await getAllSavedWords();
+  const now = Date.now();
+  return words.filter(w => (w.nextReviewDate || 0) <= now).sort((a, b) => (a.nextReviewDate || 0) - (b.nextReviewDate || 0));
+}
+
+export async function updateWordSrs(id: string, reviewLevel: number, nextReviewDate: number): Promise<void> {
+  const words = await getAllSavedWords();
+  const word = words.find(w => w.id === id);
+  if (word) {
+    word.reviewLevel = reviewLevel;
+    word.nextReviewDate = nextReviewDate;
     await setStorageItem(STORAGE_KEYS.SAVED_WORDS, words);
   }
 }
