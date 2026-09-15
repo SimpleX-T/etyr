@@ -12,10 +12,9 @@ import { SelectionDetector } from './selection/detector';
 import { SelectionStateMachine, type MachineState } from './selection/state-machine';
 import { initTooltip, type TooltipBridge } from './tooltip';
 import { PronunciationService } from '@dictionary/pronunciation';
-import './styles/tooltip.css';
+import tooltipStyles from './styles/tooltip.css?inline';
 
 const ROOT_SELECTOR = '#etyr-tooltip-root';
-const DETECTOR_SETTLE_MS = 200;
 
 export class EtyrContent {
   private detector: SelectionDetector | null = null;
@@ -75,12 +74,7 @@ export class EtyrContent {
 
     const effective = settings ?? DEFAULT_SETTINGS;
 
-    if (!effective.autoLookup) {
-      this.aborted = true;
-      return;
-    }
-
-    this.detector = new SelectionDetector(DETECTOR_SETTLE_MS);
+    this.detector = new SelectionDetector(effective);
     this.machine = new SelectionStateMachine();
     this.tooltip = initTooltip({
       onDismiss: () => this.dismissTooltip(),
@@ -88,6 +82,7 @@ export class EtyrContent {
       onPronounce: () => void this.speakCurrent(),
       onDisableSite: () => void this.disableOnSite(),
       showPronunciation: effective.enablePronunciation,
+      styles: tooltipStyles,
     });
 
     this.applyTheme(effective.theme);
@@ -112,8 +107,11 @@ export class EtyrContent {
   ): void => {
     if (areaName === 'local' && changes[STORAGE_KEYS.SETTINGS]) {
       const newSettings = changes[STORAGE_KEYS.SETTINGS].newValue as Settings | undefined;
-      if (newSettings?.theme) {
-        this.applyTheme(newSettings.theme);
+      if (newSettings) {
+        this.detector?.updateSettings(newSettings);
+        if (newSettings.theme) {
+          this.applyTheme(newSettings.theme);
+        }
       }
     }
   };

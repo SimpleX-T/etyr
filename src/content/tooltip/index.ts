@@ -12,6 +12,7 @@ export interface TooltipBridgeOptions {
   onPronounce: () => void;
   onDisableSite: () => void;
   showPronunciation?: boolean;
+  styles?: string;
 }
 
 export interface TooltipBridge {
@@ -31,6 +32,7 @@ export function initTooltip(options: TooltipBridgeOptions): TooltipBridge {
     onPronounce: options.onPronounce,
     onDisableSite: options.onDisableSite,
     showPronunciation: options.showPronunciation ?? true,
+    styles: options.styles ?? '',
   });
 
   return {

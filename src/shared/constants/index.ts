@@ -12,6 +12,8 @@ export const DICTIONARY_TIMEOUT_MS = 5000;
 
 export const DEFAULT_SETTINGS: Settings = {
   autoLookup: true,
+  triggerKey: 'none',
+  doubleClickLookup: true,
   lookupDelayMs: LOOKUP_DELAY_MS,
   enablePronunciation: true,
   enableHistory: true,

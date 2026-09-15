@@ -62,6 +62,8 @@ export interface HistoryEntry {
 
 export interface Settings {
   autoLookup: boolean;
+  triggerKey: 'none' | 'alt' | 'ctrl' | 'shift' | 'meta';
+  doubleClickLookup: boolean;
   lookupDelayMs: number;
   enablePronunciation: boolean;
   enableHistory: boolean;

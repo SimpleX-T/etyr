@@ -1,5 +1,4 @@
-import type { SelectionSnapshot } from '@shared/types';
-import { LOOKUP_DELAY_MS } from '@shared/constants';
+import type { SelectionSnapshot, Settings } from '@shared/types';
 import { createId, debounce } from '@shared/utils';
 import { isLookupCandidate, getSelectionRect, normalizeSelectionText, isWithinEditableElement } from './validate';
 
@@ -10,11 +9,30 @@ export class SelectionDetector {
   private abortController: AbortController | null = null;
   private isActive = false;
   private lastSnapshot: SelectionSnapshot | null = null;
-
+  
+  private settings: Settings;
   private debouncedDetect: { (...args: unknown[]): void; cancel(): void };
+  
+  private modifiers = {
+    alt: false,
+    ctrl: false,
+    shift: false,
+    meta: false,
+  };
 
-  constructor(delayMs: number = LOOKUP_DELAY_MS) {
-    this.debouncedDetect = debounce(() => this.detect(), delayMs);
+  constructor(initialSettings: Settings) {
+    this.settings = initialSettings;
+    this.debouncedDetect = debounce(() => this.detect(false), this.settings.lookupDelayMs);
+  }
+
+  updateSettings(newSettings: Settings): void {
+    const delayChanged = this.settings.lookupDelayMs !== newSettings.lookupDelayMs;
+    this.settings = newSettings;
+    
+    if (delayChanged) {
+      this.debouncedDetect.cancel();
+      this.debouncedDetect = debounce(() => this.detect(false), this.settings.lookupDelayMs);
+    }
   }
 
   onSelect(callback: SelectionCallback): () => void {
@@ -33,9 +51,28 @@ export class SelectionDetector {
 
     document.addEventListener('selectionchange', () => this.onSelectionChange(), { signal });
     document.addEventListener('mousedown', (e) => {
+      this.updateModifiers(e);
       if (e.target instanceof Element && e.target.closest('#etyr-tooltip-root')) return;
       this.onSelectionChange();
     }, { signal });
+    document.addEventListener('mouseup', (e) => this.updateModifiers(e), { signal });
+    document.addEventListener('keydown', (e) => this.updateModifiers(e), { signal });
+    document.addEventListener('keyup', (e) => this.updateModifiers(e), { signal });
+    document.addEventListener('dblclick', (e) => {
+      this.updateModifiers(e);
+      if (e.target instanceof Element && e.target.closest('#etyr-tooltip-root')) return;
+      if (this.settings.doubleClickLookup) {
+        this.debouncedDetect.cancel();
+        this.detect(true); // Force lookup bypassing delay/trigger
+      }
+    }, { signal });
+  }
+
+  private updateModifiers(e: MouseEvent | KeyboardEvent) {
+    this.modifiers.alt = e.altKey;
+    this.modifiers.ctrl = e.ctrlKey;
+    this.modifiers.shift = e.shiftKey;
+    this.modifiers.meta = e.metaKey;
   }
 
   destroy(): void {
@@ -71,7 +108,7 @@ export class SelectionDetector {
     this.debouncedDetect();
   }
 
-  private detect(): void {
+  private detect(isDoubleClick: boolean = false): void {
     const selection = window.getSelection();
     if (!selection || selection.isCollapsed || selection.rangeCount === 0) {
       this.emit(null);
@@ -98,6 +135,24 @@ export class SelectionDetector {
       this.emit(null);
       this.lastSnapshot = null;
       return;
+    }
+
+    // Settings check
+    if (!isDoubleClick) {
+      const { autoLookup, triggerKey } = this.settings;
+      if (!autoLookup && triggerKey === 'none') {
+        this.emit(null);
+        this.lastSnapshot = null;
+        return; // Auto disabled, and no trigger key set
+      }
+
+      if (triggerKey !== 'none') {
+        if (!this.modifiers[triggerKey]) {
+          this.emit(null);
+          this.lastSnapshot = null;
+          return; // Required modifier not held
+        }
+      }
     }
 
     const range = selection.getRangeAt(0).cloneRange();

@@ -18,6 +18,7 @@ interface ControllerOptions {
   onPronounce: () => void;
   onDisableSite: () => void;
   showPronunciation: boolean;
+  styles: string;
 }
 
 interface TooltipProps {
@@ -30,6 +31,8 @@ interface TooltipProps {
 
 export class TooltipController {
   private container: HTMLDivElement | null = null;
+  private shadowRoot: ShadowRoot | null = null;
+  private reactRootNode: HTMLDivElement | null = null;
   private root: Root | null = null;
   private rafId = 0;
   private isShown = false;
@@ -175,8 +178,20 @@ export class TooltipController {
     }
     container.dataset.etyrTheme = this.theme;
 
+    if (!this.shadowRoot) {
+      this.shadowRoot = container.attachShadow({ mode: 'open' });
+      
+      const styleSheet = document.createElement('style');
+      styleSheet.textContent = this.options.styles;
+      this.shadowRoot.appendChild(styleSheet);
+      
+      this.reactRootNode = document.createElement('div');
+      this.reactRootNode.className = 'etyr-shadow-root-container';
+      this.shadowRoot.appendChild(this.reactRootNode);
+    }
+
     this.container = container;
-    this.root = this.root ?? createRoot(container);
+    this.root = this.root ?? createRoot(this.reactRootNode!);
   }
 
   private paint(): void {
@@ -259,9 +274,9 @@ export class TooltipController {
       this.currentPosition = pos;
       this.paint();
 
-      if (height >= TOOLTIP_MAX_HEIGHT && this.container) {
-        this.container.style.maxHeight = `${TOOLTIP_MAX_HEIGHT}px`;
-        this.container.style.overflowY = 'auto';
+      if (height >= TOOLTIP_MAX_HEIGHT && this.reactRootNode) {
+        this.reactRootNode.style.maxHeight = `${TOOLTIP_MAX_HEIGHT}px`;
+        this.reactRootNode.style.overflowY = 'auto';
       }
     });
   }

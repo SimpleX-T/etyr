@@ -290,6 +290,25 @@ export default function App() {
               checked={settings.autoLookup}
               onChange={(v) => updateSetting({ autoLookup: v })}
             />
+            <SelectField
+              label="Trigger key"
+              desc="Hold this key to trigger the dictionary lookup."
+              value={settings.triggerKey}
+              options={[
+                { value: 'none', label: 'None (always auto)' },
+                { value: 'alt', label: 'Alt / Option' },
+                { value: 'ctrl', label: 'Control' },
+                { value: 'shift', label: 'Shift' },
+                { value: 'meta', label: 'Command / Windows' },
+              ]}
+              onChange={(v) => updateSetting({ triggerKey: v as Settings['triggerKey'] })}
+            />
+            <ToggleField
+              label="Double-click lookup"
+              desc="Instantly look up words when double-clicked."
+              checked={settings.doubleClickLookup}
+              onChange={(v) => updateSetting({ doubleClickLookup: v })}
+            />
             <ToggleField
               label="Pronunciation"
               desc="Read words aloud with a speaker button."
