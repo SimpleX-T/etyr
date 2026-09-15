@@ -1,12 +1,9 @@
 export function LoadingState() {
   return (
-    <div className="etyr-loading" role="status" aria-live="polite" aria-busy="true">
-      <div className="etyr-loading__spinner-wrap">
-        <div className="etyr-loading__spinner" aria-hidden="true" />
-      </div>
-      <div className="etyr-loading__content">
-        <span className="etyr-loading__title">Finding it…</span>
-      </div>
+    <div className="etyr-loading etyr-shimmer-container" role="status" aria-live="polite" aria-busy="true">
+      <div className="etyr-shimmer etyr-shimmer-badge" aria-hidden="true" />
+      <div className="etyr-shimmer etyr-shimmer-line" aria-hidden="true" style={{ width: '80%' }} />
+      <div className="etyr-shimmer etyr-shimmer-line" aria-hidden="true" style={{ width: '60%' }} />
     </div>
   );
 }

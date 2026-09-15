@@ -25,6 +25,7 @@ interface TooltipProps {
   result: DictionaryResult | null;
   state: RenderState;
   isSaved: boolean;
+  errorMessage?: string;
 }
 
 export class TooltipController {
@@ -81,13 +82,13 @@ export class TooltipController {
     this.root?.render(null);
   }
 
-  updateState(state: TooltipState, result: DictionaryResult | null, isSaved: boolean): void {
+  updateState(state: TooltipState, result: DictionaryResult | null, isSaved: boolean, errorMessage?: string): void {
     if (!this.isShown || !this.props) return;
 
     const renderState = this.toRenderState(state);
     if (!renderState) return;
 
-    this.props = { ...this.props, state: renderState, result, isSaved };
+    this.props = { ...this.props, state: renderState, result, isSaved, errorMessage };
     this.paint();
 
     // Height may have changed (e.g. error vs. definition list)
@@ -200,6 +201,7 @@ export class TooltipController {
           result={props.result}
           state={props.state}
           isSaved={props.isSaved}
+          errorMessage={props.errorMessage}
           showPronunciation={this.options.showPronunciation}
           onBookmark={this.options.onBookmark}
           onPronounce={this.options.onPronounce}

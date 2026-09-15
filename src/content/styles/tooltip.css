@@ -258,46 +258,53 @@
   min-height: 40px;
 }
 
-/* Loading */
-.etyr-loading {
+/* Loading / Shimmers */
+.etyr-shimmer-container {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 12px;
   padding: 8px 0;
 }
 
-.etyr-loading__spinner-wrap {
-  flex: 0 0 auto;
+.etyr-shimmer {
+  background: var(--etyr-border);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
 }
 
-.etyr-loading__spinner {
-  width: 20px;
+.etyr-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.05) 20%,
+    rgba(255, 255, 255, 0.1) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  animation: etyr-shimmer-animation 2s infinite;
+}
+
+.etyr-shimmer-badge {
+  width: 48px;
   height: 20px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #ffffff;
-  animation: etyr-spin 0.8s linear infinite;
+  border-radius: 10px;
 }
 
-@keyframes etyr-spin {
-  to {
-    transform: rotate(360deg);
+.etyr-shimmer-line {
+  height: 12px;
+}
+
+@keyframes etyr-shimmer-animation {
+  100% {
+    transform: translateX(100%);
   }
-}
-
-.etyr-loading__content {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.etyr-loading__title {
-  font-size: 12px;
-  color: #888888;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 600;
 }
 
 /* Definition */

@@ -14,6 +14,7 @@ export interface TooltipRootProps {
   result: DictionaryResult | null;
   state: RenderState;
   isSaved: boolean;
+  errorMessage?: string;
   showPronunciation?: boolean;
   onBookmark: () => void;
   onPronounce: () => void;
@@ -50,6 +51,7 @@ export function TooltipRoot({
   result,
   state,
   isSaved,
+  errorMessage,
   showPronunciation = true,
   onBookmark,
   onPronounce,
@@ -90,7 +92,7 @@ const canPronounce = Boolean(showPronunciation);
       stateClass = 'etyr-tooltip--error';
       break;
     case 'error':
-      content = <ErrorState message="Something went wrong. Check your connection." />;
+      content = <ErrorState message={errorMessage || "Something went wrong. Check your connection."} />;
       stateClass = 'etyr-tooltip--error';
       break;
   }

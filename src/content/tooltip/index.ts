@@ -16,7 +16,7 @@ export interface TooltipBridgeOptions {
 
 export interface TooltipBridge {
   show(snapshot: SelectionSnapshot): void;
-  updateState(state: TooltipState, result: DictionaryResult | null, isSaved: boolean): void;
+  updateState(state: TooltipState, result: DictionaryResult | null, isSaved: boolean, errorMessage?: string): void;
   hide(): void;
   reposition(): void;
   setTheme(theme: ResolvedTheme): void;
@@ -37,8 +37,8 @@ export function initTooltip(options: TooltipBridgeOptions): TooltipBridge {
     show(snapshot) {
       controller.show(snapshot.text, snapshot.rect);
     },
-    updateState(state, result, isSaved) {
-      controller.updateState(state, result, isSaved);
+    updateState(state, result, isSaved, errorMessage) {
+      controller.updateState(state, result, isSaved, errorMessage);
     },
     hide() {
       controller.hide();

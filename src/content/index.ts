@@ -11,6 +11,7 @@ import { getBrowserAPI, isExtensionContext } from '@browser/types';
 import { SelectionDetector } from './selection/detector';
 import { SelectionStateMachine, type MachineState } from './selection/state-machine';
 import { initTooltip, type TooltipBridge } from './tooltip';
+import { PronunciationService } from '@dictionary/pronunciation';
 import './styles/tooltip.css';
 
 const ROOT_SELECTOR = '#etyr-tooltip-root';
@@ -23,6 +24,7 @@ export class EtyrContent {
   private aborted = false;
   private lookupTimer: number | null = null;
   private currentResult: DictionaryResult | null = null;
+  private pronunciationService = new PronunciationService();
 
   private readonly onKeyDown = (event: KeyboardEvent): void => {
     if (event.key === 'Escape') {
@@ -226,6 +228,7 @@ export class EtyrContent {
     const ok = response?.ok === true;
     const result = ok ? (response?.data as DictionaryResult | null) : null;
     const errorCode = response?.ok === false ? response?.error?.code : undefined;
+    const errorMessage = response?.ok === false ? response?.error?.message : undefined;
 
     if (result && result.meanings.length > 0) {
       this.machine.dispatch({ type: 'resolve_complete' });
@@ -238,7 +241,7 @@ export class EtyrContent {
     } else {
       this.machine.dispatch({ type: 'resolve_error' });
       this.currentResult = null;
-      this.tooltip?.updateState(errorCode === 'NOT_FOUND' ? 'not-found' : 'error', null, false);
+      this.tooltip?.updateState(errorCode === 'NOT_FOUND' ? 'not-found' : 'error', null, false, errorMessage);
     }
   }
 
@@ -278,10 +281,11 @@ export class EtyrContent {
   private async speakCurrent(): Promise<void> {
     const result = this.currentResult;
     if (!result) return;
-    await this.sendMessage({
-      action: MESSAGE_ACTIONS.PRONUNCIATION_SPEAK,
-      payload: { query: result.query, result },
-    });
+    try {
+      await this.pronunciationService.speak(result.query, result);
+    } catch (e) {
+      console.error('Pronunciation failed:', e);
+    }
   }
 
   private async disableOnSite(): Promise<void> {
