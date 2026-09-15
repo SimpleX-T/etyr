@@ -68,6 +68,9 @@ export interface Settings {
   enablePronunciation: boolean;
   enableHistory: boolean;
   theme: 'system' | 'dark' | 'light';
+  aiProvider: 'none' | 'gemini' | 'huggingface';
+  aiApiKey: string;
+  aiModel: string;
 }
 
 export interface ExclusionEntry {

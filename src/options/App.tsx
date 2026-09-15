@@ -103,6 +103,34 @@ function SelectField({ label, desc, value, options, onChange }: SelectFieldProps
   );
 }
 
+interface InputFieldProps {
+  label: string;
+  desc?: string;
+  value: string;
+  placeholder?: string;
+  type?: 'text' | 'password';
+  onChange: (value: string) => void;
+}
+
+function InputField({ label, desc, value, placeholder, type = 'text', onChange }: InputFieldProps) {
+  return (
+    <label className="field-row" style={{ alignItems: 'flex-start' }}>
+      <div className="field-text" style={{ flex: 1 }}>
+        <span className="field-label">{label}</span>
+        {desc && <span className="field-desc">{desc}</span>}
+      </div>
+      <input
+        type={type}
+        className="field-input"
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        style={{ flex: 1, padding: '6px 8px', borderRadius: '4px', border: '1px solid var(--border)', background: 'var(--bg-input, transparent)', color: 'inherit' }}
+      />
+    </label>
+  );
+}
+
 interface ConfirmState {
   message: string;
   onConfirm: () => void;
@@ -321,6 +349,64 @@ export default function App() {
               checked={settings.enableHistory}
               onChange={(v) => updateSetting({ enableHistory: v })}
             />
+          </section>
+
+          <section className="settings-section">
+            <h2 className="section-title">Advanced Settings</h2>
+            <SelectField
+              label="AI Fallback Provider"
+              desc="Use AI to look up words missing from the standard dictionary."
+              value={settings.aiProvider}
+              options={[
+                { value: 'none', label: 'None (Disabled)' },
+                { value: 'huggingface', label: 'HuggingFace (Free Models)' },
+                { value: 'gemini', label: 'Google Gemini' },
+              ]}
+              onChange={(v) => updateSetting({ aiProvider: v as Settings['aiProvider'] })}
+            />
+
+            {settings.aiProvider === 'huggingface' && (
+              <>
+                <InputField
+                  label="HuggingFace API Key"
+                  desc="Get one for free at huggingface.co. Leave empty to use Etyr's default key."
+                  type="password"
+                  value={settings.aiApiKey}
+                  placeholder="hf_..."
+                  onChange={(v) => updateSetting({ aiApiKey: v })}
+                />
+                <InputField
+                  label="HuggingFace Model"
+                  desc="The model on Serverless Inference API."
+                  value={settings.aiModel}
+                  placeholder="meta-llama/Llama-3.2-3B-Instruct"
+                  onChange={(v) => updateSetting({ aiModel: v })}
+                />
+              </>
+            )}
+
+            {settings.aiProvider === 'gemini' && (
+              <>
+                <InputField
+                  label="Gemini API Key"
+                  desc="Get one for free at aistudio.google.com."
+                  type="password"
+                  value={settings.aiApiKey}
+                  placeholder="AIza..."
+                  onChange={(v) => updateSetting({ aiApiKey: v })}
+                />
+                <InputField
+                  label="Gemini Model"
+                  desc="The Gemini model to use."
+                  value={settings.aiModel}
+                  placeholder="gemini-1.5-flash"
+                  onChange={(v) => updateSetting({ aiModel: v })}
+                />
+              </>
+            )}
+          </section>
+
+          <section className="settings-section">
             <SelectField
               label="Lookup delay"
               desc="How long to wait before looking up a selection."

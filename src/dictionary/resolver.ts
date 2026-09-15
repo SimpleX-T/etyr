@@ -2,6 +2,7 @@ import type { DictionaryResult } from '../shared/types';
 import { normalizeQuery } from '../shared/utils';
 import { OfflineDictionaryProvider } from './offline';
 import { OnlineDictionaryProvider, OnlineDictionaryError } from './online';
+import { AiDictionaryProvider } from './ai';
 import { DictionaryCache } from './cache';
 import { addHistoryEntry } from '../storage/history';
 import { getSettings } from '../storage/settings';
@@ -68,6 +69,18 @@ class DictionaryResolver {
       if (err instanceof OnlineDictionaryError) {
         if (err.code === 'ABORTED') return { status: 'not_found' };
         if (err.code === 'NOT_FOUND' || err.status === 404) {
+          // Attempt AI fallback
+          const settings = await getSettings();
+          if (settings.aiProvider !== 'none') {
+            const aiProvider = new AiDictionaryProvider(settings);
+            const aiResult = await aiProvider.lookup(normalized);
+            if (aiResult) {
+              if (!isCurrent()) return { status: 'not_found' };
+              await this.cache.set(normalized, aiResult);
+              this.recordHistory(aiResult);
+              return { status: 'found', result: aiResult };
+            }
+          }
           return { status: 'not_found' };
         }
         return { status: 'error' };

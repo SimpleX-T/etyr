@@ -18,6 +18,9 @@ export const DEFAULT_SETTINGS: Settings = {
   enablePronunciation: true,
   enableHistory: true,
   theme: 'system',
+  aiProvider: 'huggingface',
+  aiApiKey: '',
+  aiModel: 'meta-llama/Llama-3.2-3B-Instruct',
 };
 
 export const DICTIONARY_API_BASE = 'https://freedictionaryapi.com/api/v1/entries/en';
