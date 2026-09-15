@@ -1,4 +1,4 @@
-/* Etyr tooltip styles. Scoped to the `#etyr-tooltip-root` subtree. */
+/* Etyr tooltip styles. Scoped to the `:host` subtree. */
 @import '@fontsource/outfit/300.css';
 @import '@fontsource/outfit/400.css';
 @import '@fontsource/outfit/500.css';
@@ -10,14 +10,14 @@
 @import '@fontsource/lora/600.css';
 @import '@fontsource/lora/700.css';
 
-#etyr-tooltip-root,
-#etyr-tooltip-root * {
+:host,
+:host * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-#etyr-tooltip-root {
+:host {
   font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 14px;
@@ -27,9 +27,9 @@
   -webkit-font-smoothing: antialiased;
 }
 
-#etyr-tooltip-root *,
-#etyr-tooltip-root *::before,
-#etyr-tooltip-root *::after {
+:host *,
+:host *::before,
+:host *::after {
   box-sizing: inherit;
 }
 
@@ -41,7 +41,7 @@
   pointer-events: auto;
 }
 
-#etyr-tooltip-root[data-etyr-paused='true'] {
+:host([data-etyr-paused='true']) {
   pointer-events: auto;
 }
 
@@ -178,7 +178,7 @@
   cursor: not-allowed;
 }
 
-#etyr-tooltip-root .etyr-icon-btn svg {
+:host .etyr-icon-btn svg {
   display: block;
 }
 
@@ -430,13 +430,13 @@
 /*  Footer                                                             */
 /* ------------------------------------------------------------------ */
 
-#etyr-tooltip-root .etyr-tooltip__footer {
+:host .etyr-tooltip__footer {
   display: flex;
   justify-content: flex-end;
   margin-top: 24px;
 }
 
-#etyr-tooltip-root .etyr-tooltip__disable {
+:host .etyr-tooltip__disable {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -453,30 +453,30 @@
   transition: color 0.2s ease, background 0.2s ease;
 }
 
-#etyr-tooltip-root .etyr-tooltip__disable:hover {
+:host .etyr-tooltip__disable:hover {
   color: rgba(255, 255, 255, 0.8);
 }
 
-#etyr-tooltip-root .etyr-tooltip__disable:focus-visible {
+:host .etyr-tooltip__disable:focus-visible {
   outline: 2px solid #ffffff;
   outline-offset: 1px;
 }
 
-#etyr-tooltip-root .etyr-tooltip__disable svg {
+:host .etyr-tooltip__disable svg {
   display: none;
 }
 
 /* Scrollbar (WebKit/Blink) */
-#etyr-tooltip-root ::-webkit-scrollbar {
+:host ::-webkit-scrollbar {
   width: 6px;
 }
 
-#etyr-tooltip-root ::-webkit-scrollbar-thumb {
+:host ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 999px;
 }
 
-#etyr-tooltip-root ::-webkit-scrollbar-track {
+:host ::-webkit-scrollbar-track {
   background: transparent;
 }
 
@@ -484,81 +484,81 @@
 /*  Light variant — Minimalist Light                                   */
 /* ------------------------------------------------------------------ */
 
-#etyr-tooltip-root[data-etyr-theme='light'] #etyr-tooltip {
+:host([data-etyr-theme='light']) #etyr-tooltip {
   background: #ffffff;
   border-color: rgba(0, 0, 0, 0.05);
   color: #121212;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-tooltip__word {
+:host([data-etyr-theme='light']) .etyr-tooltip__word {
   color: #000000;
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-tooltip__phonetic {
+:host([data-etyr-theme='light']) .etyr-tooltip__phonetic {
   color: #666666;
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-definition__pos {
+:host([data-etyr-theme='light']) .etyr-definition__pos {
   color: #111111;
   border-color: rgba(0, 0, 0, 0.15);
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-definition__text {
+:host([data-etyr-theme='light']) .etyr-definition__text {
   color: #1a1a1a;
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-definition__example {
+:host([data-etyr-theme='light']) .etyr-definition__example {
   color: #888888;
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-icon-btn {
+:host([data-etyr-theme='light']) .etyr-icon-btn {
   color: #666666;
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-icon-btn:hover {
+:host([data-etyr-theme='light']) .etyr-icon-btn:hover {
   background: rgba(0, 0, 0, 0.06);
   color: #000000;
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-speaker--playing {
+:host([data-etyr-theme='light']) .etyr-speaker--playing {
   background: rgba(0, 0, 0, 0.08);
   color: #000000;
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-bookmark--saved {
+:host([data-etyr-theme='light']) .etyr-bookmark--saved {
   color: #000000;
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-bookmark--saved:hover {
+:host([data-etyr-theme='light']) .etyr-bookmark--saved:hover {
   background: rgba(0, 0, 0, 0.08);
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-definition__more {
+:host([data-etyr-theme='light']) .etyr-definition__more {
   border-color: rgba(0, 0, 0, 0.15);
   color: #666666;
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-definition__more:hover {
+:host([data-etyr-theme='light']) .etyr-definition__more:hover {
   background: rgba(0, 0, 0, 0.04);
   color: #000000;
   border-color: rgba(0, 0, 0, 0.3);
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-tooltip__disable {
+:host([data-etyr-theme='light']) .etyr-tooltip__disable {
   color: rgba(0, 0, 0, 0.4);
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-tooltip__disable:hover {
+:host([data-etyr-theme='light']) .etyr-tooltip__disable:hover {
   color: rgba(0, 0, 0, 0.8);
   background: transparent;
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] .etyr-error__title {
+:host([data-etyr-theme='light']) .etyr-error__title {
   color: #000000;
 }
 
-#etyr-tooltip-root[data-etyr-theme='light'] ::-webkit-scrollbar-thumb {
+:host([data-etyr-theme='light']) ::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.15);
 }
 
