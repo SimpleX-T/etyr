@@ -1,4 +1,6 @@
 import type { DictionaryResult } from '../shared/types';
+import { MESSAGE_ACTIONS } from '../shared/constants';
+import { getBrowserAPI, isExtensionContext } from '../browser/types';
 
 let currentAudio: HTMLAudioElement | null = null;
 
@@ -40,6 +42,18 @@ export class PronunciationService {
 
   async speakWithSynthesis(word: string, lang: string = 'en-US'): Promise<void> {
     stopCurrent();
+
+    if (isExtensionContext()) {
+      try {
+        await getBrowserAPI().runtime.sendMessage({
+          action: MESSAGE_ACTIONS.PRONUNCIATION_SPEAK,
+          payload: { query: word },
+        });
+        return;
+      } catch (err) {
+        // Fall back to local synthesis if message fails
+      }
+    }
 
     return new Promise((resolve, reject) => {
       const utterance = new SpeechSynthesisUtterance(word);

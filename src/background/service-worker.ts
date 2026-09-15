@@ -85,18 +85,23 @@ function extractHostname(url?: string): string | undefined {
 /* ------------------------------------------------------------------ */
 
 function speakWord(word: string): Promise<boolean> {
-  const scope = globalThis as typeof globalThis & { speechSynthesis?: SpeechSynthesis };
-  const synth = scope.speechSynthesis;
-  if (!synth) return Promise.resolve(false);
+  const scope = globalThis as typeof globalThis & { chrome?: typeof chrome };
+  
+  if (scope.chrome?.tts) {
+    return new Promise<boolean>((resolve) => {
+      scope.chrome!.tts.speak(word, {
+        lang: 'en-US',
+        rate: 0.9,
+        onEvent: (event) => {
+          if (['end', 'error', 'interrupted', 'cancelled'].includes(event.type)) {
+            resolve(true);
+          }
+        },
+      });
+    });
+  }
 
-  return new Promise<boolean>((resolve) => {
-    const utterance = new SpeechSynthesisUtterance(word);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.9;
-    utterance.onend = () => resolve(true);
-    utterance.onerror = () => resolve(true);
-    synth.speak(utterance);
-  });
+  return Promise.resolve(false);
 }
 
 /* ------------------------------------------------------------------ */
