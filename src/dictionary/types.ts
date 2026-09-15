@@ -9,21 +9,16 @@ export interface OfflineWordEntry {
 
 export interface OnlineDictionaryResponse {
   word: string;
-  phonetic?: string;
-  phonetics?: Array<{ text?: string; audio?: string }>;
-  meanings?: Array<{
+  entries?: Array<{
     partOfSpeech?: string;
-    definitions?: Array<{
+    pronunciations?: Array<{ type?: string; text?: string; audio?: string }>;
+    senses?: Array<{
       definition?: string;
-      example?: string;
+      examples?: string[];
       synonyms?: string[];
       antonyms?: string[];
     }>;
-    synonyms?: string[];
-    antonyms?: string[];
   }>;
-  sourceUrls?: string[];
-  license?: { name: string; url: string };
 }
 
 export interface CacheEntry {
@@ -57,27 +52,30 @@ export function normalizeOnlineResponse(
   query: string,
   source: 'online' | 'cache'
 ): DictionaryResult {
-  const meanings: Meaning[] = (raw.meanings || []).map(m => ({
-    partOfSpeech: normalizePartOfSpeech(m.partOfSpeech || 'unknown'),
-    definitions: (m.definitions || []).map(d => ({
-      definition: d.definition || '',
-      example: d.example,
-      synonyms: d.synonyms,
-      antonyms: d.antonyms,
+  const meanings: Meaning[] = (raw.entries || []).map(entry => ({
+    partOfSpeech: normalizePartOfSpeech(entry.partOfSpeech || 'unknown'),
+    definitions: (entry.senses || []).map(sense => ({
+      definition: sense.definition || '',
+      example: sense.examples && sense.examples.length > 0 ? sense.examples[0] : undefined,
+      synonyms: sense.synonyms,
+      antonyms: sense.antonyms,
     })) as Definition[],
   })) as Meaning[];
 
   let audioUrl: string | undefined;
-  let phonetic = raw.phonetic;
+  let phonetic: string | undefined;
 
-  if (raw.phonetics) {
-    for (const p of raw.phonetics) {
-      if (p.audio) {
-        audioUrl = p.audio;
-        break;
-      }
-      if (p.text && !phonetic) {
-        phonetic = p.text;
+  if (raw.entries) {
+    for (const entry of raw.entries) {
+      if (entry.pronunciations) {
+        for (const p of entry.pronunciations) {
+          if (p.audio && !audioUrl) {
+            audioUrl = p.audio;
+          }
+          if (p.text && !phonetic) {
+            phonetic = p.text;
+          }
+        }
       }
     }
   }

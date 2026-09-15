@@ -18,7 +18,7 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: 'system',
 };
 
-export const DICTIONARY_API_BASE = 'https://api.dictionaryapi.dev/api/v2/entries/en';
+export const DICTIONARY_API_BASE = 'https://freedictionaryapi.com/api/v1/entries/en';
 
 export const MESSAGE_ACTIONS = {
   DICTIONARY_RESOLVE: 'DICTIONARY_RESOLVE' as const,
