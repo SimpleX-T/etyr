@@ -32,7 +32,9 @@
   "options_page": "src/options/index.html",
   "permissions": ["storage"],
   "host_permissions": [
-    "https://freedictionaryapi.com/*"
+    "https://freedictionaryapi.com/*",
+    "https://api-inference.huggingface.co/*",
+    "https://generativelanguage.googleapis.com/*"
   ],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; style-src 'self' 'unsafe-inline'"

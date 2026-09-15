@@ -21,7 +21,7 @@ export default function HomePage() {
   const loadRecents = useCallback(async () => {
     const res = await sendMessage<HistoryEntry[]>({
       action: MESSAGE_ACTIONS.HISTORY_GET_RECENT,
-      payload: { limit: 10 },
+      payload: { limit: 5 },
     });
     if (res?.ok === true && Array.isArray(res.data)) {
       setRecents(res.data);

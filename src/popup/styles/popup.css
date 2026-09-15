@@ -416,13 +416,13 @@ ul {
   align-items: center;
   gap: var(--etyr-space-2);
   width: 100%;
-  padding: 7px 10px;
+  padding: 4px 8px;
   border: none;
   border-radius: var(--etyr-radius-sm);
   background: transparent;
   color: var(--etyr-text);
   text-align: left;
-  font-size: 13px;
+  font-size: 12px;
   transition: background 0.15s ease;
 }
 
