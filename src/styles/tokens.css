@@ -1,0 +1,55 @@
+@import '@fontsource/outfit/300.css';
+@import '@fontsource/outfit/400.css';
+@import '@fontsource/outfit/500.css';
+@import '@fontsource/outfit/600.css';
+@import '@fontsource/lora/400.css';
+@import '@fontsource/lora/400-italic.css';
+@import '@fontsource/lora/500.css';
+@import '@fontsource/lora/500-italic.css';
+@import '@fontsource/lora/600.css';
+@import '@fontsource/lora/700.css';
+
+:root {
+  --etyr-bg: #000000;
+  --etyr-surface: #141414;
+  --etyr-surface-hover: #222222;
+  --etyr-surface-active: #333333;
+  --etyr-text: #ffffff;
+  --etyr-text-muted: #888888;
+  --etyr-accent: #ffffff;
+  --etyr-accent-hover: #cccccc;
+  --etyr-border: rgba(255, 255, 255, 0.1);
+  --etyr-border-strong: rgba(255, 255, 255, 0.2);
+  --etyr-radius: 20px;
+  --etyr-radius-sm: 10px;
+  --etyr-shadow: 0 24px 64px rgba(0, 0, 0, 0.8);
+  --etyr-blur: 0px;
+
+  --etyr-danger: #ff453a;
+  --etyr-success: #32d74b;
+
+  --etyr-space-1: 4px;
+  --etyr-space-2: 8px;
+  --etyr-space-3: 12px;
+  --etyr-space-4: 16px;
+  --etyr-space-5: 24px;
+  --etyr-space-6: 32px;
+
+  --etyr-font: 'Outfit', system-ui, -apple-system, sans-serif;
+  --etyr-font-serif: 'Lora', Georgia, serif;
+  --etyr-font-mono: "SF Mono", "Fira Code", monospace;
+}
+
+:root[data-theme="light"] {
+  --etyr-bg: #f5f5f5;
+  --etyr-surface: #ffffff;
+  --etyr-surface-hover: #f0f0f0;
+  --etyr-surface-active: #e0e0e0;
+  --etyr-text: #000000;
+  --etyr-text-muted: #666666;
+  --etyr-accent: #000000;
+  --etyr-accent-hover: #444444;
+  --etyr-border: rgba(0, 0, 0, 0.08);
+  --etyr-border-strong: rgba(0, 0, 0, 0.15);
+  --etyr-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+}

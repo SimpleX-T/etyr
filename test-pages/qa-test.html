@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Etyr — QA Test Page</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #1a1a24;
+      --surface-hover: #222230;
+      --text: #f0f0f5;
+      --text-muted: #8888aa;
+      --accent: #6366f1;
+      --border: rgba(255,255,255,0.1);
+      --radius: 12px;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.6;
+      padding: 40px 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+    }
+
+    section {
+      margin-bottom: 48px;
+      padding: 32px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--accent);
+    }
+
+    p {
+      margin-bottom: 16px;
+      line-height: 1.8;
+    }
+
+    .highlight-test { background: rgba(99,102,241,0.1); padding: 2px 4px; border-radius: 4px; }
+
+    code {
+      background: rgba(99,102,241,0.15);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background: var(--bg);
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+    }
+
+    pre code { background: none; padding: 0; }
+
+    .test-word {
+      display: inline-block;
+      padding: 4px 12px;
+      background: var(--surface-hover);
+      border-radius: 6px;
+      margin: 4px;
+      cursor: default;
+    }
+
+    .dark-bg-section {
+      background: #000;
+      padding: 32px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .light-bg-section {
+      background: #f5f5f5;
+      color: #1a1a1a;
+      padding: 32px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .light-bg-section h3 { color: #333; }
+    .light-bg-section p { color: #555; }
+
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+      margin-right: 8px;
+    }
+
+    button:hover { background: #818cf8; }
+
+    .form-test {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .form-test input {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-family: inherit;
+      flex: 1;
+    }
+
+    .form-test input::placeholder { color: var(--text-muted); }
+
+    ul { list-style: none; padding: 0; margin-bottom: 16px; }
+    li { padding: 8px 0; border-bottom: 1px solid var(--border); }
+    li:last-child { border-bottom: none; }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 16px;
+      margin: 16px 0;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .emoji-test { font-size: 1.5rem; margin: 8px 0; }
+    .special-chars { font-family: serif; margin: 16px 0; }
+  </style>
+</head>
+<body>
+  <h1>Etyr QA Test Page</h1>
+  <p class="subtitle">Highlight any word or phrase below to test the dictionary tooltip.</p>
+
+  <section>
+    <h2>Single Word Lookups</h2>
+    <p>Try selecting any of these words:</p>
+    <p>
+      <span class="test-word">ephemeral</span>
+      <span class="test-word">ubiquitous</span>
+      <span class="test-word">eloquent</span>
+      <span class="test-word">pragmatic</span>
+      <span class="test-word">resilient</span>
+      <span class="test-word">serendipity</span>
+      <span class="test-word">meticulous</span>
+      <span class="test-word">enigmatic</span>
+      <span class="test-word">precarious</span>
+      <span class="test-word">clandestine</span>
+    </p>
+    <p>These are harder vocabulary words:</p>
+    <p>
+      <span class="test-word">obfuscate</span>
+      <span class="test-word">ameliorate</span>
+      <span class="test-word">pernicious</span>
+      <span class="test-word">vicissitude</span>
+      <span class="test-word">perspicacious</span>
+      <span class="test-word">pusillanimous</span>
+      <span class="test-word">quintessential</span>
+      <span class="test-word">recondite</span>
+      <span class="test-word">sycophant</span>
+      <span class="test-word">verisimilitude</span>
+    </p>
+  </section>
+
+  <section>
+    <h2>Phrase Lookups</h2>
+    <p>Try selecting multi-word phrases:</p>
+    <p>
+      <span class="test-word">red herring</span>
+      <span class="test-word">bite the bullet</span>
+      <span class="test-word">on the contrary</span>
+      <span class="test-word">a blessing in disguise</span>
+      <span class="test-word">the writing was rather convoluted</span>
+      <span class="test-word">break a leg</span>
+    </p>
+  </section>
+
+  <section>
+    <h2>Invalid Selections (Should NOT Trigger)</h2>
+    <p>The following should not trigger a lookup:</p>
+    <ul>
+      <li>Very long text selections that span entire paragraphs (over 200 characters)</li>
+      <li>Code blocks (see below) that contain mostly special characters</li>
+      <li>Text inside input fields (try below)</li>
+    </ul>
+
+    <div class="form-test">
+      <input type="text" placeholder="Type in this input — selections here should not trigger">
+    </div>
+
+    <div class="form-test">
+      <textarea placeholder="Type in this textarea — selections here should not trigger" rows="2" style="width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; font-family: inherit; resize: vertical;"></textarea>
+    </div>
+  </section>
+
+  <section>
+    <h2>Code Block (Should NOT Trigger)</h2>
+    <pre><code>const resolveWord = async (query) => {
+  const controller = new AbortController();
+  const response = await fetch(
+    `https://api.dictionaryapi.dev/api/v2/entries/en/${query}`,
+    { signal: controller.signal }
+  );
+  if (!response.ok) throw new Error('Not found');
+  return response.json();
+};</code></pre>
+  </section>
+
+  <section>
+    <h2>Dark Background Test</h2>
+    <div class="dark-bg-section">
+      <h3>Dark Background Area</h3>
+      <p>The tooltip should still be visible and properly styled against this dark background.</p>
+      <p>Try selecting: <span class="test-word">ubiquitous</span> and <span class="test-word">ephemeral</span></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Light Background Test</h2>
+    <div class="light-bg-section">
+      <h3>Light Background Area</h3>
+      <p>The tooltip should still be clearly visible against this lighter background.</p>
+      <p>Try selecting: <span class="test-word">eloquent</span> and <span class="test-word">pragmatic</span></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Special Characters and Edge Cases</h2>
+    <div class="special-chars">
+      <p>Selecting: "résumé" (accented), "über" (umlaut), "naïve" (diaeresis)</p>
+      <p>Try: <span class="test-word">résumé</span> <span class="test-word">über</span> <span class="test-word">naïve</span></p>
+    </div>
+    <p>Try selecting just a punctuation mark like: <span class="test-word">...</span> — this should NOT trigger a lookup.</p>
+    <p>Try selecting a single letter like: <span class="test-word">a</span> — this should NOT trigger a lookup.</p>
+  </section>
+
+  <section>
+    <h2>Scroll and Positioning Test</h2>
+    <p>This section tests tooltip positioning when scrolling.</p>
+    <div style="height: 200px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; padding: 16px;">
+      <p>This is a scrollable container. Selecting <span class="test-word">ephemeral</span> inside should show the tooltip at a good position.</p>
+      <p style="margin-top: 150px;">More content below the fold.</p>
+      <p style="margin-top: 150px;">Even more content. The tooltip should reposition as you scroll.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Long Word Selection Test</h2>
+    <p>Select these long but valid words:</p>
+    <p>
+      <span class="test-word">pseudopseudohypoparathyroidism</span>
+      <span class="test-word">antidisestablishmentarianism</span>
+      <span class="test-word">supercalifragilisticexpialidocious</span>
+    </p>
+    <p>These should trigger a lookup if the dictionary has them, otherwise show "not found" gracefully.</p>
+  </section>
+
+  <section>
+    <h2>Timeline and Interaction Test</h2>
+    <p>This section tests rapid selection changes:</p>
+    <p>
+      1. Quickly select "ephemeral", wait 0.5 seconds, then select "ubiquitous"
+      2. The tooltip should show the result for "ubiquitous", NOT "ephemeral"
+    </p>
+    <p>
+      3. Select a word and wait for the tooltip to appear
+      4. Press Escape — the tooltip should disappear
+      5. Select another word — new tooltip should appear
+    </p>
+    <p>
+      6. Click somewhere else on the page — the tooltip should disappear
+    </p>
+  </section>
+
+  <section>
+    <h2>Keyboard Navigation Test</h2>
+    <p>After a tooltip appears, try:</p>
+    <ul>
+      <li><code>Tab</code> — should move focus between speaker and bookmark buttons</li>
+      <li><code>Enter</code> / <code>Space</code> — should activate focused button</li>
+      <li><code>Escape</code> — should dismiss the tooltip</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Link and Button Test</h2>
+    <p>Try selecting text near links: <a href="#test">this is a link</a> and buttons like the one below.</p>
+    <button>Button</button>
+    <p>Try selecting the word "Button" — it should still work.</p>
+  </section>
+
+  <section>
+    <h2>Instructions</h2>
+    <ol style="list-style: decimal; padding-left: 20px;">
+      <li>Load the Etyr extension in Chrome as an unpacked extension</li>
+      <li>Navigate to this file (or serve it via a local server)</li>
+      <li>Highlight any word or phrase above</li>
+      <li>Wait ~1.5 seconds — a tooltip should appear with the definition</li>
+      <li>Test speaker button (pronunciation)</li>
+      <li>Test bookmark button (save word)</li>
+      <li>Test Escape key (dismiss)</li>
+      <li>Test clicking elsewhere (dismiss)</li>
+      <li>Test rapid selection changes (no race conditions)</li>
+      <li>Open the Etyr popup from the toolbar — check recent lookups</li>
+    </ol>
+  </section>
+</body>
+</html>
