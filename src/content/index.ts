@@ -247,7 +247,8 @@ export class EtyrContent {
     } else {
       this.machine.dispatch({ type: 'resolve_error' });
       this.currentResult = null;
-      this.tooltip?.updateState(errorCode === 'NOT_FOUND' ? 'not-found' : 'error', null, false, errorMessage);
+      const state = (errorCode === 'NOT_FOUND' || (ok && result && result.meanings.length === 0)) ? 'not-found' : 'error';
+      this.tooltip?.updateState(state, null, false, errorMessage);
     }
   }
 

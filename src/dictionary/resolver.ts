@@ -45,7 +45,7 @@ class DictionaryResolver {
       }
 
       const cachedResult = await this.cache.get(normalized);
-      if (cachedResult) {
+      if (cachedResult && cachedResult.meanings.length > 0) {
         if (!isCurrent()) return { status: 'not_found' };
         const cached: DictionaryResult = { ...cachedResult, source: 'cache', timestamp: Date.now() };
         this.recordHistory(cached);
