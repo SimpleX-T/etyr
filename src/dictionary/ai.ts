@@ -95,7 +95,7 @@ export class AiDictionaryProvider {
 
   private async queryHuggingFace(word: string): Promise<DictionaryResult | null> {
     const apiKey = this.settings.aiApiKey.trim() || HF_DEFAULT_KEY;
-    const model = this.settings.aiModel || 'meta-llama/Llama-3.2-3B-Instruct';
+    const model = this.settings.aiModel || 'Qwen/Qwen2.5-72B-Instruct';
     const url = `https://router.huggingface.co/v1/chat/completions`;
 
     const response = await fetch(url, {
