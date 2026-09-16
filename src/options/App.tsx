@@ -381,11 +381,16 @@ export default function App() {
                   placeholder="hf_..."
                   onChange={(v) => updateSetting({ aiApiKey: v })}
                 />
-                <InputField
+                <SelectField
                   label="HuggingFace Model"
-                  desc="The model on Serverless Inference API."
+                  desc="The model to use via HuggingFace Router."
                   value={settings.aiModel}
-                  placeholder="meta-llama/Llama-3.2-3B-Instruct"
+                  options={[
+                    { value: 'deepseek-ai/DeepSeek-V4.1-Flash:novita', label: 'DeepSeek V4.1 Flash (Free)' },
+                    { value: 'Qwen/Qwen2.5-72B-Instruct', label: 'Qwen 2.5 72B Instruct' },
+                    { value: 'mistralai/Mistral-7B-Instruct-v0.3', label: 'Mistral 7B Instruct v0.3' },
+                    { value: 'microsoft/Phi-3-mini-4k-instruct', label: 'Phi-3 Mini 4K Instruct' },
+                  ]}
                   onChange={(v) => updateSetting({ aiModel: v })}
                 />
               </>
