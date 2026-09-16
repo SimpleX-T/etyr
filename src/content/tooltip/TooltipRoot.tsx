@@ -5,7 +5,7 @@ import { DefinitionList } from './components/DefinitionList';
 import { ErrorState } from './components/ErrorState';
 import { SpeakerButton } from './components/SpeakerButton';
 import { BookmarkButton } from './components/BookmarkButton';
-import { BanIcon } from './components/icons';
+import { BanIcon, SparklesIcon } from './components/icons';
 
 type RenderState = Extract<TooltipState, 'loading' | 'showing' | 'error' | 'not-found'>;
 
@@ -109,6 +109,12 @@ const canPronounce = Boolean(showPronunciation);
           <span className="etyr-tooltip__word">{displayWord(query, result)}</span>
           {(state === 'showing' || state === 'error' || state === 'not-found') && result?.phonetic && (
             <span className="etyr-tooltip__phonetic">{result.phonetic}</span>
+          )}
+          {state === 'showing' && result?.source === 'ai' && (
+            <div className="etyr-tooltip__ai-badge" title="Powered by advanced word search algorithm">
+              <SparklesIcon size={12} />
+              <span>AI Definition</span>
+            </div>
           )}
         </div>
         <HeaderControls

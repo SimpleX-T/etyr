@@ -22,6 +22,13 @@ function MeaningGroup({ meaning, maxSynonyms }: { meaning: Meaning; maxSynonyms:
       ).slice(0, maxSynonyms)
     : [];
 
+  const hasAntonyms = meaning.definitions.some(def => def.antonyms && def.antonyms.length > 0);
+  const antonyms = hasAntonyms
+    ? Array.from(
+        new Set(meaning.definitions.flatMap(def => def.antonyms ?? [])),
+      ).slice(0, maxSynonyms)
+    : [];
+
   return (
     <div className="etyr-definition__meaning">
       <PartOfSpeechBadge partOfSpeech={meaning.partOfSpeech} />
@@ -41,6 +48,12 @@ function MeaningGroup({ meaning, maxSynonyms }: { meaning: Meaning; maxSynonyms:
         <p className="etyr-definition__synonyms">
           <span className="etyr-definition__synonyms-label">Synonyms: </span>
           {synonyms.join(', ')}
+        </p>
+      )}
+      {antonyms.length > 0 && (
+        <p className="etyr-definition__antonyms">
+          <span className="etyr-definition__synonyms-label">Antonyms: </span>
+          {antonyms.join(', ')}
         </p>
       )}
     </div>

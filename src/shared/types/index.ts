@@ -22,7 +22,7 @@ export interface Meaning {
   definitions: Definition[];
 }
 
-export type DictionarySource = 'offline' | 'online' | 'wiktionary' | 'cache';
+export type DictionarySource = 'offline' | 'online' | 'wiktionary' | 'cache' | 'ai';
 
 export interface DictionaryResult {
   query: string;

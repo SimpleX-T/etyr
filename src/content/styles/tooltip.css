@@ -366,7 +366,8 @@
   font-family: 'Outfit', system-ui, sans-serif;
 }
 
-.etyr-definition__synonyms {
+.etyr-definition__synonyms,
+.etyr-definition__antonyms {
   font-size: 13px;
   color: #888888;
   margin-top: 4px;
@@ -604,4 +605,22 @@
   .etyr-bookmark svg {
     transition: none;
   }
+}
+.etyr-tooltip__ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+  padding: 2px 8px;
+  background: rgba(138, 43, 226, 0.15);
+  color: #a855f7;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.etyr-tooltip--dark .etyr-tooltip__ai-badge {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
 }

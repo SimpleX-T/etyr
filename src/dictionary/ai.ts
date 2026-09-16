@@ -90,7 +90,7 @@ export class AiDictionaryProvider {
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!text) return null;
 
-    return this.parseAndValidateJson(text);
+    return this.parseAndValidateJson(text, word);
   }
 
   private async queryHuggingFace(word: string): Promise<DictionaryResult | null> {
@@ -131,10 +131,10 @@ export class AiDictionaryProvider {
     }
     if (!text) return null;
 
-    return this.parseAndValidateJson(text);
+    return this.parseAndValidateJson(text, word);
   }
 
-  private parseAndValidateJson(text: string): DictionaryResult | null {
+  private parseAndValidateJson(text: string, word: string): DictionaryResult | null {
     try {
       // Sometimes models ignore the instruction and wrap in markdown anyway
       let cleanText = text.trim();
@@ -154,7 +154,11 @@ export class AiDictionaryProvider {
       if (!parsed || Object.keys(parsed).length === 0) return null;
       if (!parsed.word || !Array.isArray(parsed.meanings)) return null;
 
-      return parsed as DictionaryResult;
+      const result = parsed as DictionaryResult;
+      result.source = 'ai';
+      result.query = word; // We pass word since query isn't explicitly available, but word is essentially the query here.
+      result.timestamp = Date.now();
+      return result;
     } catch (e) {
       console.error('Failed to parse AI dictionary response:', e, text);
       return null;
