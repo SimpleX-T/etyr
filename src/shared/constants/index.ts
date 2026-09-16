@@ -20,7 +20,7 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: 'system',
   aiProvider: 'huggingface',
   aiApiKey: '',
-  aiModel: 'meta-llama/Llama-3.2-3B-Instruct',
+  aiModel: 'deepseek-ai/DeepSeek-V4.1-Flash:novita',
   autoPlayPronunciation: false,
   enableNewTab: true,
 };
