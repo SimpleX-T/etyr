@@ -111,7 +111,7 @@ export class AiDictionaryProvider {
           { role: 'user', content: `Provide the dictionary definition JSON for the word: "${word}"` }
         ],
         temperature: 0.1,
-        max_tokens: 500
+        max_tokens: 4096
       })
     });
 
@@ -120,7 +120,15 @@ export class AiDictionaryProvider {
     }
 
     const data = await response.json();
-    const text = data.choices?.[0]?.message?.content;
+    const message = data.choices?.[0]?.message;
+    // Reasoning models (e.g. DeepSeek) put chain-of-thought in reasoning_content
+    // and the actual answer in content. If content is empty, try extracting JSON from reasoning.
+    let text = message?.content;
+    if (!text && message?.reasoning_content) {
+      // Try to extract a JSON block from the reasoning stream
+      const jsonMatch = message.reasoning_content.match(/\{[\s\S]*"word"[\s\S]*"meanings"[\s\S]*\}/);
+      if (jsonMatch) text = jsonMatch[0];
+    }
     if (!text) return null;
 
     return this.parseAndValidateJson(text);
