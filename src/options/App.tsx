@@ -349,6 +349,12 @@ export default function App() {
               checked={settings.enableHistory}
               onChange={(v) => updateSetting({ enableHistory: v })}
             />
+            <ToggleField
+              label="New Tab Override"
+              desc="Replace Chrome's default new tab page with Etyr Word of the Day."
+              checked={settings.enableNewTab}
+              onChange={(v) => updateSetting({ enableNewTab: v })}
+            />
           </section>
 
           <section className="settings-section">
