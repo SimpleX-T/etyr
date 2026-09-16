@@ -65,7 +65,7 @@ describe('selection race conditions', () => {
       results.push({ requestId: reqId, text });
     }
 
-    function onComplete(reqId: string, text: string) {
+    function onComplete(reqId: string, _text: string) {
       if (reqId !== currentRequestId) return 'stale';
       return 'accepted';
     }

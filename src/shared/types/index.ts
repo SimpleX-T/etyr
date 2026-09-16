@@ -10,16 +10,39 @@ export type PartOfSpeech =
   | 'phrase'
   | 'unknown';
 
+export interface LinkedWord {
+  query: string;
+  label: string;
+}
+
+export interface SenseQuote {
+  text: string;
+  reference?: string;
+}
+
+export interface SenseForm {
+  word: string;
+  tags?: string[];
+}
+
 export interface Definition {
   definition: string;
   example?: string;
+  examples?: string[];
   synonyms?: string[];
   antonyms?: string[];
+  tags?: string[];
+  quotes?: SenseQuote[];
+  linkedWords?: LinkedWord[];
+  subsenses?: Definition[];
 }
 
 export interface Meaning {
   partOfSpeech: PartOfSpeech;
   definitions: Definition[];
+  forms?: SenseForm[];
+  synonyms?: string[];
+  antonyms?: string[];
 }
 
 export type DictionarySource = 'offline' | 'online' | 'wiktionary' | 'cache' | 'ai';
@@ -73,6 +96,7 @@ export interface Settings {
   autoLookup: boolean;
   triggerKey: 'none' | 'alt' | 'ctrl' | 'shift' | 'meta';
   doubleClickLookup: boolean;
+  doubleClickInstantly: boolean;
   lookupDelayMs: number;
   enablePronunciation: boolean;
   enableHistory: boolean;
@@ -115,7 +139,9 @@ export type MessageAction =
   | 'CONTENT_INIT'
   | 'PRONUNCIATION_SPEAK'
   | 'STATS_GET'
-  | 'STATS_RECORD_REVIEW';
+  | 'STATS_RECORD_REVIEW'
+  | 'SIDEPANEL_OPEN'
+  | 'SIDEPANEL_LOAD';
 
 export interface MessageRequest {
   action: MessageAction;

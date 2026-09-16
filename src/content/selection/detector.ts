@@ -61,9 +61,13 @@ export class SelectionDetector {
     document.addEventListener('dblclick', (e) => {
       this.updateModifiers(e);
       if (e.target instanceof Element && e.target.closest('#etyr-tooltip-root')) return;
-      if (this.settings.doubleClickLookup) {
+      if (this.settings.doubleClickLookup && this.settings.doubleClickInstantly) {
         this.debouncedDetect.cancel();
         this.detect(true); // Force lookup bypassing delay/trigger
+      } else {
+        // Treat the double-click as a plain selection so it respects the
+        // lookup delay — handy when the intent is really to select + copy.
+        this.onSelectionChange();
       }
     }, { signal });
   }

@@ -15,6 +15,7 @@ import { PronunciationService } from '@dictionary/pronunciation';
 import tooltipStyles from './styles/tooltip.css?inline';
 
 const ROOT_SELECTOR = '#etyr-tooltip-root';
+const NAV_MAX_DEPTH = 12;
 
 export class EtyrContent {
   private detector: SelectionDetector | null = null;
@@ -26,6 +27,9 @@ export class EtyrContent {
   private currentSnapshot: SelectionSnapshot | null = null;
   private settings: Settings = DEFAULT_SETTINGS;
   private pronunciationService = new PronunciationService();
+  private navRequestId = 0;
+  private navStack: Array<{ id: string; label: string }> = [];
+  private sidePanelActive = false;
 
   private readonly onKeyDown = (event: KeyboardEvent): void => {
     if (event.key === 'Escape') {
@@ -84,6 +88,9 @@ export class EtyrContent {
       onBookmark: () => void this.toggleBookmark(),
       onPronounce: () => void this.speakCurrent(),
       onDisableSite: () => void this.disableOnSite(),
+      onOpenWord: (query, _label) => this.openNavWord(query),
+      onBack: () => this.navigateBack(),
+      onOpenSidePanel: (word) => this.openSidePanelWord(word),
       showPronunciation: effective.enablePronunciation,
       styles: tooltipStyles,
     });
@@ -93,6 +100,15 @@ export class EtyrContent {
     this.machine.onStateChange((state, _requestId, snapshot) =>
       this.onMachineState(state, snapshot),
     );
+
+    // Load the initial side-panel state (the panel page updates it as it
+    // opens/closes, but the content script may boot while it's already open).
+    void getBrowserAPI()
+      .storage.local.get(STORAGE_KEYS.SIDEPANEL_ACTIVE)
+      .then(result => {
+        this.sidePanelActive = result[STORAGE_KEYS.SIDEPANEL_ACTIVE] === true;
+      })
+      .catch(() => undefined);
 
     this.detector.onSelect(snapshot => this.onSelection(snapshot));
     this.detector.start();
@@ -108,7 +124,9 @@ export class EtyrContent {
     changes: Record<string, { newValue?: unknown }>,
     areaName: string,
   ): void => {
-    if (areaName === 'local' && changes[STORAGE_KEYS.SETTINGS]) {
+    if (areaName !== 'local') return;
+
+    if (changes[STORAGE_KEYS.SETTINGS]) {
       const newSettings = changes[STORAGE_KEYS.SETTINGS].newValue as Settings | undefined;
       if (newSettings) {
         this.settings = newSettings;
@@ -117,6 +135,10 @@ export class EtyrContent {
           this.applyTheme(newSettings.theme);
         }
       }
+    }
+
+    if (changes[STORAGE_KEYS.SIDEPANEL_ACTIVE]) {
+      this.sidePanelActive = changes[STORAGE_KEYS.SIDEPANEL_ACTIVE].newValue === true;
     }
   };
 
@@ -159,6 +181,7 @@ export class EtyrContent {
 
     if (!snapshot) {
       this.clearTimers();
+      this.navRequestId++;
       this.machine.dispatch({ type: 'dismiss' });
       this.hideTooltip();
       return;
@@ -169,6 +192,19 @@ export class EtyrContent {
       this.tooltip?.hide();
     }
 
+    // Side panel is open: route the selected word there instead of showing
+    // the in-page tooltip.
+    if (this.sidePanelActive) {
+      this.navStack = [];
+      this.navRequestId++;
+      this.currentResult = null;
+      this.clearTimers();
+      this.openSidePanelWord(snapshot.text);
+      return;
+    }
+
+    this.navStack = [];
+    this.navRequestId++;
     this.currentResult = null;
     this.currentSnapshot = snapshot;
     this.clearTimers();
@@ -319,8 +355,97 @@ export class EtyrContent {
   }
 
   private hideTooltip(): void {
+    this.navStack = [];
+    this.navRequestId++;
+    this.tooltip?.setNavPath([], null);
     this.tooltip?.hide();
     this.currentResult = null;
+  }
+
+  /* ------------------------------------------------------------------ */
+  /*  Cross-reference navigation ("form of" → interactive word links)    */
+  /* ------------------------------------------------------------------ */
+
+  private openNavWord(word: string): void {
+    if (!this.machine || this.aborted || !this.tooltip) return;
+
+    const base = this.currentResult;
+    if (!base) return;
+
+    const target = normalizeQuery(word);
+    if (!target || target === normalizeQuery(base.query)) return;
+
+    const existingIndex = this.navStack.findIndex(item => item.id === target);
+    if (existingIndex >= 0) {
+      // Journey loops back to an ancestor: truncate and re-show it.
+      this.navStack.length = existingIndex + 1;
+      const last = this.navStack[this.navStack.length - 1];
+      this.tooltip.setNavPath(this.navStack, last ? { id: last.id, label: last.label } : null);
+      void this.runNavLookup(target);
+      return;
+    }
+
+    if (this.navStack.length >= NAV_MAX_DEPTH) {
+      this.navStack.shift();
+    }
+    this.navStack.push({ id: normalizeQuery(base.query), label: base.word || base.query });
+    this.tooltip.setNavPath(this.navStack, { id: target, label: word });
+    void this.runNavLookup(target);
+  }
+
+  private navigateBack(): void {
+    if (!this.machine || this.aborted || !this.tooltip) return;
+
+    const previous = this.navStack.pop();
+    if (!previous) {
+      this.tooltip.setNavPath([], null);
+      return;
+    }
+
+    this.tooltip.setNavPath(this.navStack, { id: previous.id, label: previous.label });
+    void this.runNavLookup(previous.id);
+  }
+
+  private openSidePanelWord(word: string): void {
+    if (!word || !isExtensionContext()) return;
+    // The panel replaces the tooltip — close it so the page is unobstructed.
+    this.dismissTooltip();
+    void this.sendMessage({
+      action: MESSAGE_ACTIONS.SIDEPANEL_OPEN,
+      payload: { word },
+    });
+  }
+
+  private async runNavLookup(query: string): Promise<void> {
+    if (!this.tooltip || !this.machine || this.aborted) return;
+
+    const requestId = ++this.navRequestId;
+    this.currentResult = null;
+    this.tooltip.updateState('loading', null, false);
+
+    const request: MessageRequest = {
+      action: MESSAGE_ACTIONS.DICTIONARY_RESOLVE,
+      requestId: String(requestId),
+      payload: { query: normalizeQuery(query) },
+    };
+
+    const response = await this.sendMessage<DictionaryResult | null>(request);
+    if (requestId !== this.navRequestId) return;
+
+    const ok = response?.ok === true;
+    const result = ok ? (response?.data as DictionaryResult | null) : null;
+
+    if (result && result.meanings.length > 0) {
+      this.currentResult = result;
+      const saved = await this.isSaved(result.query);
+      if (requestId !== this.navRequestId) return;
+      this.tooltip?.updateState('showing', result, saved);
+    } else {
+      const errorCode = response?.ok === false ? response?.error?.code : undefined;
+      const errorMessage = response?.ok === false ? response?.error?.message : undefined;
+      const notFound = errorCode === 'NOT_FOUND' || (ok && result && result.meanings.length === 0);
+      this.tooltip?.updateState(notFound ? 'not-found' : 'error', null, false, errorMessage);
+    }
   }
 
   private clearTimers(): void {

@@ -6,11 +6,24 @@ export { TooltipController } from './TooltipController';
 export { TooltipRoot } from './TooltipRoot';
 export { calculatePosition } from './position';
 
+export interface TooltipNavItem {
+  id: string;
+  label: string;
+}
+
+export interface TooltipNav {
+  path: TooltipNavItem[];
+  current: TooltipNavItem;
+}
+
 export interface TooltipBridgeOptions {
   onDismiss: () => void;
   onBookmark: () => void;
   onPronounce: () => void;
   onDisableSite: () => void;
+  onOpenWord?: (query: string, label: string) => void;
+  onBack?: () => void;
+  onOpenSidePanel?: (word: string) => void;
   showPronunciation?: boolean;
   styles?: string;
 }
@@ -18,6 +31,7 @@ export interface TooltipBridgeOptions {
 export interface TooltipBridge {
   show(snapshot: SelectionSnapshot): void;
   updateState(state: TooltipState, result: DictionaryResult | null, isSaved: boolean, errorMessage?: string): void;
+  setNavPath(path: TooltipNavItem[], current: TooltipNavItem | null): void;
   hide(): void;
   reposition(): void;
   setTheme(theme: ResolvedTheme): void;
@@ -31,6 +45,9 @@ export function initTooltip(options: TooltipBridgeOptions): TooltipBridge {
     onBookmark: options.onBookmark,
     onPronounce: options.onPronounce,
     onDisableSite: options.onDisableSite,
+    onOpenWord: options.onOpenWord,
+    onBack: options.onBack,
+    onOpenSidePanel: options.onOpenSidePanel,
     showPronunciation: options.showPronunciation ?? true,
     styles: options.styles ?? '',
   });
@@ -41,6 +58,9 @@ export function initTooltip(options: TooltipBridgeOptions): TooltipBridge {
     },
     updateState(state, result, isSaved, errorMessage) {
       controller.updateState(state, result, isSaved, errorMessage);
+    },
+    setNavPath(path, current) {
+      controller.setNavPath(path, current);
     },
     hide() {
       controller.hide();

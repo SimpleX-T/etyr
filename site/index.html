@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Etyr — Understand the web as you read it.</title>
+<meta name="description" content="A minimalist dictionary extension. Select any word on the web — Etyr shows its meaning, pronunciation, examples, quotes, and links, instantly." />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="icon-128.png" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="tooltip-real.css" />
+</head>
+<body>
+
+<header class="nav" id="top">
+  <a class="wordmark" href="#top" aria-label="Etyr home">
+    <span class="wordmark-mark" aria-hidden="true">E</span>
+    <span class="wordmark-text">Etyr</span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#features">Features</a>
+    <a href="#demo">Demo</a>
+    <a href="#privacy">Privacy</a>
+  </nav>
+  <a class="btn btn-primary btn-sm" href="#install" data-store="chrome">Get Etyr</a>
+</header>
+
+<main>
+
+  <!-- ============================= HERO ============================= -->
+  <section class="hero" id="demo">
+    <p class="eyebrow">A dictionary extension for the web</p>
+    <h1 class="hero-title">
+      Understand the web
+      <span class="hero-title-line">as you <em>read</em> it.</span>
+    </h1>
+    <p class="hero-sub">
+      Select any word on any page — Etyr shows what it means, how it sounds,
+      how it&rsquo;s used, and the words around it. No tabs, no typing, no friction.
+    </p>
+
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#install" data-store="chrome">Add to Chrome</a>
+      <a class="btn btn-secondary" href="https://addons.mozilla.org/en-US/firefox/addon/etyr/" target="_blank" data-store="firefox">Get for Firefox</a>
+      <span class="hero-meta">v1.0 &middot; free &middot; open &middot; local-first</span>
+    </div>
+
+    <!-- Interactive product demo ------------------------------------ -->
+    <div class="demo" aria-label="Interactive demo: click a highlighted word">
+      <div class="demo-stage">
+        <div class="demo-sentence" id="sentence">
+          <p>
+            The memoir was praised for its exquisite
+            <button class="demo-word" data-word="verisimilitude" aria-label="Look up verisimilitude">verisimilitude</button>
+            — the way every scene carried the weight of the real. Reading it, I felt
+            strangely
+            <button class="demo-word" data-word="elated" aria-label="Look up elated">elated</button>,
+            as if the years of her memory had quietly
+            <button class="demo-word" data-word="decade" aria-label="Look up decade">decaded</button>
+            into a single afternoon.
+          </p>
+        </div>
+        <div class="demo-tip">△ click a highlighted word</div>
+      </div>
+
+      <!-- Tooltip mock (injected by app.js) -->
+      <div class="demo-tooltip" id="demoTooltip" hidden aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- =========================== FEATURES ========================== -->
+  <section class="section" id="features">
+    <div class="section-head">
+      <p class="eyebrow">Everything the dictionary gives you</p>
+      <h2 class="section-title">Read deeper, faster.</h2>
+    </div>
+
+    <div class="grid">
+      <article class="card">
+        <span class="card-num">01</span>
+        <h3>Select. That&rsquo;s it.</h3>
+        <p>
+          Highlight any word on any site. A sleek tooltip appears at the selection with
+          the definition — no tabs, no searching, no leaving the page.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="card-num">02</span>
+        <h3>The full dictionary surface</h3>
+        <p>
+          Word forms, every example, quoted passages with citations, nested subsenses,
+          and clickable synonym &amp; antonym chips — aggregated across the whole entry,
+          not just the first line.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="card-num">03</span>
+        <h3>Words that talk to each other</h3>
+        <p>
+          &ldquo;Form of&rdquo; senses and synonym chips are live links. Click
+          <em>decades</em> and jump straight to <em>decade</em> — inside the same
+          tooltip, with a back button for your path.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="card-num">04</span>
+        <h3>Copy anything, cited</h3>
+        <p>
+          Copy a single definition, a quote with its citation, or the whole entry —
+          formatted and ready to paste into notes, essays, or your own dictionary.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="card-num">05</span>
+        <h3>A side panel for long reads</h3>
+        <p>
+          Send any word to the side panel and keep it open while you keep reading.
+          Once it&rsquo;s open, every word you select lands there — with a search box
+          of your own.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="card-num">06</span>
+        <h3>Build your vocabulary</h3>
+        <p>
+          Bookmark words, re-visit your lookups, and study them later. Everything is
+          local — no account, no profile, no tracking.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="card-num">07</span>
+        <h3>AI Fallback</h3>
+        <p>
+          Encountered slang, a modern acronym, or an obscure term? Etyr uses an advanced AI search algorithm (Google Gemini or Hugging Face) to define words not found in traditional dictionaries.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="card-num">08</span>
+        <h3>Beautiful New Tab</h3>
+        <p>
+          Etyr transforms your new tab page into a customizable dashboard (choose Playful Notebook or Dark Flashcard) featuring your saved vocabulary.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================ SHOWCASE ========================= -->
+  <section class="section showcase">
+    <div class="section-head">
+      <p class="eyebrow">One tooltip, fully armed</p>
+      <h2 class="section-title">This is the tooltip.</h2>
+    </div>
+
+    <!-- Standalone tooltip mock — doubles as store-screenshot fodder -->
+    <div class="showcase-panel" id="showcase">
+      <div id="showcaseCard" style="display:flex; justify-content:center;"></div>
+    </div>
+
+    <div class="showcase-caption">
+      <p>
+        This is Etyr&rsquo;s full surface: part-of-speech groups, word-form chips,
+        every example, quoted passages with citations, nested subsenses, and synonym /
+        antonym chips. Click a chip to follow the word.
+      </p>
+      <p class="mono-detail">Fonts&nbsp;Georgia · Mono&nbsp;SF&nbsp;Mono · UI&nbsp;system</p>
+    </div>
+  </section>
+
+  <!-- ============================ PRIVACY ========================== -->
+  <section class="section privacy" id="privacy">
+    <div class="section-head">
+      <p class="eyebrow">Local-first by design</p>
+      <h2 class="section-title">Your reading stays yours.</h2>
+    </div>
+    <div class="privacy-grid">
+      <div class="privacy-card">
+        <h3>No accounts.</h3>
+        <p>Etyr has no sign-in, no profile, and nothing to &ldquo;sync&rdquo; unless you say so.</p>
+      </div>
+      <div class="privacy-card">
+        <h3>No tracking.</h3>
+        <p>The extension never collects page content, browsing history, or your bookmarks.</p>
+      </div>
+      <div class="privacy-card">
+        <h3>Only the word leaves.</h3>
+        <p>When you look up a word, that word is sent to a public dictionary API. Nothing else.</p>
+      </div>
+      <div class="privacy-card">
+        <h3>Everything else is local.</h3>
+        <p>Saved words, lookups, and settings live in your browser&rsquo;s local storage.</p>
+      </div>
+    </div>
+    <p class="privacy-note"><a href="privacy.html">Read the full privacy disclosure →</a></p>
+  </section>
+
+  <!-- ============================== CTA ============================ -->
+  <section class="section cta" id="install">
+    <p class="eyebrow">Free &middot; Chrome + Firefox</p>
+    <h2 class="cta-title">Give the next word its due.</h2>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#" data-store="chrome">Add to Chrome</a>
+      <a class="btn btn-secondary" href="https://addons.mozilla.org/en-US/firefox/addon/etyr/" target="_blank" data-store="firefox">Get for Firefox</a>
+    </div>
+    <p class="hero-meta">Store links go live as each listing is approved.</p>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span class="wordmark-text">Etyr</span>
+  <span class="footer-meta">© 2026 Etyr · <a href="privacy.html">Privacy</a> · Made for readers</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

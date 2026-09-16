@@ -9,6 +9,8 @@ export interface StorageSchema {
   etyr_lookup_history: import('../shared/types').HistoryEntry[];
   etyr_dictionary_cache: Record<string, import('../dictionary/types').CacheEntry>;
   etyr_stats: import('../shared/types').Stats;
+  etyr_sidepanel_last_query: string;
+  etyr_sidepanel_active: boolean;
 }
 
 export async function getStorageItem<K extends keyof StorageSchema>(

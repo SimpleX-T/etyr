@@ -23,6 +23,12 @@ export interface BrowserAPI {
   };
   tabs: {
     query(queryInfo: { active?: boolean; currentWindow?: boolean }): Promise<Array<{ id?: number; url?: string }>>;
+    create(properties: { url: string; active?: boolean }): Promise<{ id?: number }>;
+  };
+  sidePanel?: {
+    open(options: { tabId?: number; windowId?: number }): Promise<void>;
+    close(): Promise<void>;
+    setOptions(options: { path?: string; tabId?: number; enabled?: boolean }): Promise<void>;
   };
   contextMenus?: {
     create(properties: Record<string, unknown>): void;

@@ -26,6 +26,65 @@ export function SpeakerIcon({ size = 16, className, ariaHidden = true }: IconPro
   );
 }
 
+export function CopyIcon({ size = 16, className, ariaHidden = true }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      className={className}
+      aria-hidden={ariaHidden}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+    </svg>
+  );
+}
+
+export function CheckIcon({ size = 16, className, ariaHidden = true }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      className={className}
+      aria-hidden={ariaHidden}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+export function BackIcon({ size = 16, className, ariaHidden = true }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      className={className}
+      aria-hidden={ariaHidden}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m12 19-7-7 7-7" />
+      <path d="M19 12H5" />
+    </svg>
+  );
+}
+
 export function HeartIcon({ size = 16, className, fill = 'none', ariaHidden = true }: IconProps) {
   return (
     <svg
@@ -120,6 +179,26 @@ export function PlayIcon({ size = 12, className, ariaHidden = true }: IconProps)
       strokeLinejoin="round"
     >
       <polygon points="5 3 19 12 5 21 5 3" />
+    </svg>
+  );
+}
+
+export function PanelRightIcon({ size = 14, className, ariaHidden = true }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      className={className}
+      aria-hidden={ariaHidden}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+      <path d="M15 3v18" />
     </svg>
   );
 }

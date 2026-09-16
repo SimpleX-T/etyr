@@ -14,6 +14,7 @@ export const DEFAULT_SETTINGS: Settings = {
   autoLookup: true,
   triggerKey: 'none',
   doubleClickLookup: true,
+  doubleClickInstantly: true,
   lookupDelayMs: LOOKUP_DELAY_MS,
   enablePronunciation: true,
   enableHistory: true,
@@ -49,6 +50,8 @@ export const MESSAGE_ACTIONS = {
   PRONUNCIATION_SPEAK: 'PRONUNCIATION_SPEAK' as const,
   STATS_GET: 'STATS_GET' as const,
   STATS_RECORD_REVIEW: 'STATS_RECORD_REVIEW' as const,
+  SIDEPANEL_OPEN: 'SIDEPANEL_OPEN' as const,
+  SIDEPANEL_LOAD: 'SIDEPANEL_LOAD' as const,
 } as const;
 
 export const STORAGE_KEYS = {
@@ -58,6 +61,8 @@ export const STORAGE_KEYS = {
   LOOKUP_HISTORY: 'etyr_lookup_history',
   DICTIONARY_CACHE: 'etyr_dictionary_cache',
   STATS: 'etyr_stats',
+  SIDEPANEL_LAST_QUERY: 'etyr_sidepanel_last_query',
+  SIDEPANEL_ACTIVE: 'etyr_sidepanel_active',
 } as const;
 
 export const PUNCTUATION_REGEX = /^[^\w]+$/;

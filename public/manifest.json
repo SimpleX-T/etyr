@@ -33,7 +33,10 @@
     "newtab": "src/newtab/index.html"
   },
   "options_page": "src/options/index.html",
-  "permissions": ["storage"],
+  "permissions": ["storage", "sidePanel"],
+  "side_panel": {
+    "default_path": "src/sidepanel/index.html"
+  },
   "host_permissions": [
     "https://freedictionaryapi.com/*",
     "https://router.huggingface.co/*",

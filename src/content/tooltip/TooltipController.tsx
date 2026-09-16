@@ -4,6 +4,7 @@ import type { ResolvedTheme } from '@shared/utils';
 import { TooltipRoot, type TooltipRootProps } from './TooltipRoot';
 import { calculatePosition } from './position';
 import { getSelectionRect } from '../selection/validate';
+import type { TooltipNav, TooltipNavItem } from '.';
 
 const ROOT_ID = 'etyr-tooltip-root';
 const TOOLTIP_WIDTH = 300;
@@ -17,6 +18,9 @@ interface ControllerOptions {
   onBookmark: () => void;
   onPronounce: () => void;
   onDisableSite: () => void;
+  onOpenWord?: (query: string, label: string) => void;
+  onBack?: () => void;
+  onOpenSidePanel?: (word: string) => void;
   showPronunciation: boolean;
   styles: string;
 }
@@ -27,6 +31,7 @@ interface TooltipProps {
   state: RenderState;
   isSaved: boolean;
   errorMessage?: string;
+  nav: TooltipNav | null;
 }
 
 export class TooltipController {
@@ -58,6 +63,7 @@ export class TooltipController {
       result: null,
       state: 'loading',
       isSaved: false,
+      nav: null,
     };
     this.ensureMounted();
     this.attachViewportListeners();
@@ -96,6 +102,15 @@ export class TooltipController {
 
     // Height may have changed (e.g. error vs. definition list)
     this.scheduleMeasure();
+  }
+
+  setNavPath(path: TooltipNavItem[], current: TooltipNavItem | null): void {
+    if (!this.isShown || !this.props) return;
+    this.props = {
+      ...this.props,
+      nav: path.length > 0 && current ? { path, current } : null,
+    };
+    this.paint();
   }
 
   setTheme(theme: ResolvedTheme): void {
@@ -217,11 +232,15 @@ export class TooltipController {
           state={props.state}
           isSaved={props.isSaved}
           errorMessage={props.errorMessage}
+          nav={props.nav}
           showPronunciation={this.options.showPronunciation}
           onBookmark={this.options.onBookmark}
           onPronounce={this.options.onPronounce}
           onDismiss={this.options.onDismiss}
           onDisableSite={this.options.onDisableSite}
+          onOpenWord={this.options.onOpenWord}
+          onBack={this.options.onBack}
+          onOpenSidePanel={this.options.onOpenSidePanel}
         />
       </div>,
     );

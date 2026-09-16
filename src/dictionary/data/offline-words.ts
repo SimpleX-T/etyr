@@ -1,6 +1,7 @@
 import type { OfflineWordEntry } from '../types';
 
 export const offlineWords: OfflineWordEntry[] = [
+  { word: 'etyr', phonetic: '/ˈiːtər/', meanings: [{ partOfSpeech: 'noun', definitions: [{ definition: 'A minimalist reading companion that surfaces meaning without breaking focus.', example: 'He installed Etyr to instantly understand obscure words.' }] }] },
   { word: 'aberration', phonetic: '/ˌæb.əˈreɪ.ʃən/', meanings: [{ partOfSpeech: 'noun', definitions: [{ definition: 'A departure from what is normal or expected.', example: 'The warm weather in December was an aberration.' }] }] },
   { word: 'abscond', phonetic: '/əbˈskɒnd/', meanings: [{ partOfSpeech: 'verb', definitions: [{ definition: 'To leave hurriedly and secretly, typically to escape from custody or avoid detection.', example: 'The suspect absconded before the trial.' }] }] },
   { word: 'acquiesce', phonetic: '/ˌæk.wiˈes/', meanings: [{ partOfSpeech: 'verb', definitions: [{ definition: 'To accept something reluctantly but without protest.', example: 'She acquiesced to her parents\' wishes.' }] }] },

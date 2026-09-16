@@ -338,6 +338,12 @@ export default function App() {
               onChange={(v) => updateSetting({ doubleClickLookup: v })}
             />
             <ToggleField
+              label="Instant double-click"
+              desc="When on, double-click skips the delay. Turn off if you double-click to select text for copying and don't want an instant lookup."
+              checked={settings.doubleClickInstantly}
+              onChange={(v) => updateSetting({ doubleClickInstantly: v })}
+            />
+            <ToggleField
               label="Pronunciation"
               desc="Read words aloud with a speaker button."
               checked={settings.enablePronunciation}

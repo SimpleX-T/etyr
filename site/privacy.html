@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Etyr — Privacy</title>
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="icon-128.png" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .privacy-page{max-width:680px;margin:0 auto;padding:clamp(40px,8vw,96px) clamp(20px,5vw,48px)}
+  .privacy-page h1{font:500 clamp(36px,6vw,56px)/1.05 var(--serif);margin:8px 0 12px;letter-spacing:-.02em}
+  .privacy-page h2{font:600 20px var(--serif);margin:36px 0 8px}
+  .privacy-page p,.privacy-page li{color:var(--muted);font-size:15px;line-height:1.7}
+  .privacy-page ul{padding-left:20px;margin-top:8px;display:grid;gap:6px}
+  .privacy-page .updated{font:12px var(--mono);letter-spacing:.08em;color:#666;text-transform:uppercase}
+  .privacy-page a{color:var(--accent);border-bottom:1px dashed rgba(168,85,247,.5)}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <a class="wordmark" href="index.html">
+    <span class="wordmark-mark" aria-hidden="true">E</span>
+    <span class="wordmark-text">Etyr</span>
+  </a>
+  <a class="btn btn-sm btn-primary" href="index.html">Back to home</a>
+</header>
+
+<main class="privacy-page">
+  <p class="eyebrow">Privacy</p>
+  <h1>Your reading stays yours.</h1>
+  <p class="updated">Last updated · September 2026</p>
+
+  <h2>What Etyr collects</h2>
+  <p>
+    Etyr is built to be local-first. It has no accounts, no sign-in, and no
+    profile. It does not collect browsing history, page content, bookmarks, or
+    any personal information.
+  </p>
+
+  <h2>Network requests</h2>
+  <p>
+    Etyr makes network requests to public dictionary APIs (such as the Free Dictionary API) and optionally AI fallback services (Google Gemini, Hugging Face) to fetch definitions when you look up a word. No
+    other data is transmitted. Definitions are cached locally so repeat lookups
+    happen offline.
+  </p>
+
+  <h2>Local storage</h2>
+  <p>Everything else lives in your browser&rsquo;s local storage on your device:</p>
+  <ul>
+    <li>Words you save to your vocabulary</li>
+    <li>Your lookup history</li>
+    <li>Your settings (theme, pronunciation, site exclusions)</li>
+    <li>The dictionary cache described above</li>
+  </ul>
+
+  <h2>What is intentionally not collected</h2>
+  <ul>
+    <li>No analytics, trackers, or cookies</li>
+    <li>No advertising identifiers</li>
+    <li>No reading history or page content</li>
+    <li>No keyboard or form input beyond the words you explicitly look up</li>
+  </ul>
+
+  <h2>Changes</h2>
+  <p>
+    If this policy changes, the version on this page will be updated with a new
+    &ldquo;last updated&rdquo; date.
+  </p>
+</main>
+
+<footer class="footer">
+  <span class="wordmark-text">Etyr</span>
+  <span class="footer-meta">© 2026 Etyr · <a href="privacy.html">Privacy</a> · Made for readers</span>
+</footer>
+
+</body>
+</html>

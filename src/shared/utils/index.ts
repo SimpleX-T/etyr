@@ -1,6 +1,9 @@
 import { PUNCTUATION_REGEX, URL_REGEX, EMAIL_REGEX, MAX_SELECTION_LENGTH, MIN_SELECTION_LENGTH } from '../constants';
 import type { Settings } from '../types';
 
+export * from './clipboard';
+export * from './format';
+
 export type ResolvedTheme = 'dark' | 'light';
 
 export function resolveTheme(theme: Settings['theme']): ResolvedTheme {
@@ -10,6 +13,11 @@ export function resolveTheme(theme: Settings['theme']): ResolvedTheme {
       ? window.matchMedia('(prefers-color-scheme: light)')
       : null;
   return media?.matches ? 'light' : 'dark';
+}
+
+export function sourceLabel(source: string): string {
+  if (source === 'cache' || source === 'offline') return 'local';
+  return source;
 }
 
 export function normalizeText(text: string): string {
@@ -166,4 +174,35 @@ export function stripHtmlToText(html: string): string {
   text = text.replace(/[\u200b\u200e\u200f]/g, '');
   text = text.replace(/\s+/g, ' ').trim();
   return text;
+}
+
+export type DefinitionSegment =
+  | { type: 'text'; text: string }
+  | { type: 'link'; text: string; query: string };
+
+export function splitDefinitionSegments(
+  definition: string,
+  linkedWords?: NonNullable<import('../types').Definition['linkedWords']>,
+): DefinitionSegment[] {
+  if (!linkedWords || linkedWords.length === 0) {
+    return definition ? [{ type: 'text', text: definition }] : [];
+  }
+
+  const segments: DefinitionSegment[] = [];
+  let rest = definition;
+
+  for (const word of linkedWords) {
+    const idx = rest.indexOf(word.label);
+    if (idx === -1) continue;
+
+    if (idx > 0) segments.push({ type: 'text', text: rest.slice(0, idx) });
+    segments.push({ type: 'link', text: word.label, query: word.query });
+    rest = rest.slice(idx + word.label.length);
+  }
+
+  if (rest) segments.push({ type: 'text', text: rest });
+  if (segments.length === 0 && definition) {
+    segments.push({ type: 'text', text: definition });
+  }
+  return segments;
 }

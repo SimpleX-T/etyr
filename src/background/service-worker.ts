@@ -320,6 +320,47 @@ const handlers: Partial<Record<MessageAction, MessageHandler>> = {
     return { played: true };
   },
 
+  [MESSAGE_ACTIONS.SIDEPANEL_OPEN]: async (payload, sender) => {
+    const p = unwrap(payload);
+    const query = asString(p.word) ?? asString(p.query) ?? undefined;
+    const tabId = sender?.tab?.id;
+    const api = getBrowserAPI();
+
+    let opened: 'side-panel' | 'tab';
+
+    if (tabId && api.sidePanel) {
+      try {
+        await api.sidePanel.open({ tabId });
+        opened = 'side-panel';
+      } catch {
+        // The panel could not be opened on this tab — fall back to a tab.
+        const base = chrome.runtime.getURL('src/sidepanel/index.html');
+        await api.tabs.create({
+          url: `${base}${query ? `?q=${encodeURIComponent(query)}` : ''}`,
+        });
+        opened = 'tab';
+      }
+    } else {
+      // Firefox (or a browser without chrome.sidePanel): open the page in a new tab.
+      const base = chrome.runtime.getURL('src/sidepanel/index.html');
+      await api.tabs.create({
+        url: `${base}${query ? `?q=${encodeURIComponent(query)}` : ''}`,
+      });
+      opened = 'tab';
+    }
+
+    // Hand the word to the panel: persist it (in case the page isn't loaded
+    // yet) and broadcast to any live extension pages.
+    if (query) {
+      await setStorageItem(STORAGE_KEYS.SIDEPANEL_LAST_QUERY, query);
+      void getBrowserAPI()
+        .runtime.sendMessage({ action: MESSAGE_ACTIONS.SIDEPANEL_LOAD, payload: { query } })
+        .catch(() => undefined);
+    }
+
+    return { opened };
+  },
+
   [MESSAGE_ACTIONS.STATS_GET]: async () => {
     return getStats();
   },
@@ -334,7 +375,7 @@ const handlers: Partial<Record<MessageAction, MessageHandler>> = {
     // Calculate next review based on simplified SM-2 logic
     const now = Date.now();
     let nextDate = now;
-    let newLevel = rating > 0 ? (typeof p.currentLevel === 'number' ? p.currentLevel : 0) + rating : 0;
+    const newLevel = rating > 0 ? (typeof p.currentLevel === 'number' ? p.currentLevel : 0) + rating : 0;
     
     // Convert newLevel to time interval
     if (newLevel === 0) nextDate = now + 1000 * 60 * 60 * 24; // 1 day

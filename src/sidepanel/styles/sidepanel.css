@@ -1,0 +1,28 @@
+/* ------------------------------------------------------------------ */
+/*  Side panel shell                                                   */
+/*  The panel is taller and fluid-width (unlike the fixed 360px popup) */
+/* ------------------------------------------------------------------ */
+
+html,
+body {
+  width: auto;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.app.side-panel {
+  min-height: 100vh;
+}
+
+.app-content:has(.search-form) {
+  padding-top: 14px;
+}
+
+/*  Close button sits apart from the page-nav buttons               */
+
+.side-panel .nav .nav-btn:last-child {
+  margin-left: 6px;
+  border-left: 1px solid var(--etyr-border);
+}

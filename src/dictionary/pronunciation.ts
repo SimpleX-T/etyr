@@ -52,6 +52,7 @@ export class PronunciationService {
         return;
       } catch (err) {
         // Fall back to local synthesis if message fails
+        void err;
       }
     }
 

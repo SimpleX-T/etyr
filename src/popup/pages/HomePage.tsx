@@ -6,7 +6,13 @@ import { sendMessage } from '@shared/messaging';
 import { formatRelativeTime } from '@shared/utils';
 import SearchResult, { speakPronunciation } from '../components/SearchResult';
 
-export default function HomePage() {
+export default function HomePage({
+  initialQuery,
+  onInitialQueryConsumed,
+}: {
+  initialQuery?: string;
+  onInitialQueryConsumed?: () => void;
+}) {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState<DictionaryResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -15,6 +21,7 @@ export default function HomePage() {
   const [recents, setRecents] = useState<HistoryEntry[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const requestSeq = useRef(0);
+  const lastInitial = useRef<string | undefined>(undefined);
 
   /* -- load recents ------------------------------------------------ */
 
@@ -82,6 +89,17 @@ export default function HomePage() {
     [loadRecents],
   );
 
+  /* -- external deep-link / side-panel loads ------------------------- */
+
+  useEffect(() => {
+    if (initialQuery && initialQuery !== lastInitial.current) {
+      lastInitial.current = initialQuery;
+      setQuery(initialQuery);
+      void resolveWord(initialQuery);
+      onInitialQueryConsumed?.();
+    }
+  }, [initialQuery, resolveWord, onInitialQueryConsumed]);
+
   /* -- bookmark toggle -------------------------------------------- */
 
   const toggleBookmark = useCallback(async () => {
@@ -141,6 +159,7 @@ export default function HomePage() {
           isSaved={isSaved}
           onSpeak={handleSpeak}
           onToggleBookmark={() => void toggleBookmark()}
+          onOpenWord={resolveWord}
         />
       )}
 

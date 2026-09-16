@@ -23,15 +23,18 @@ describe('dictionary response normalization', () => {
   it('normalizes the online API response into our internal format', () => {
     const raw: OnlineDictionaryResponse = {
       word: 'Ephemeral',
-      phonetic: '/ɪˈfem.ər.əl/',
-      phonetics: [
-        { text: '/ɪˈfem.ər.əl/', audio: 'https://cdn.example.com/ephemeral.mp3' },
-      ],
-      meanings: [
+      entries: [
         {
           partOfSpeech: 'adjective',
-          definitions: [
-            { definition: 'lasting for a very short time', example: 'an ephemeral moment', synonyms: ['fleeting', 'transient'] },
+          pronunciations: [
+            { text: '/ɪˈfem.ər.əl/', audio: 'https://cdn.example.com/ephemeral.mp3' },
+          ],
+          senses: [
+            {
+              definition: 'lasting for a very short time',
+              examples: ['an ephemeral moment'],
+              synonyms: ['fleeting', 'transient'],
+            },
           ],
         },
       ],
@@ -51,7 +54,7 @@ describe('dictionary response normalization', () => {
   it('handles missing optional fields', () => {
     const raw: OnlineDictionaryResponse = {
       word: 'foo',
-      meanings: [],
+      entries: [],
     };
 
     const result = normalizeOnlineResponse(raw, 'foo', 'online');
@@ -60,10 +63,14 @@ describe('dictionary response normalization', () => {
     expect(result.audioUrl).toBeUndefined();
   });
 
-  it('uses phonetic from phonetics array when top-level missing', () => {
+  it('uses phonetic from pronunciations array when present', () => {
     const raw: OnlineDictionaryResponse = {
       word: 'bar',
-      phonetics: [{ text: '/bɑːr/' }],
+      entries: [
+        {
+          pronunciations: [{ text: '/bɑːr/' }],
+        },
+      ],
     };
 
     const result = normalizeOnlineResponse(raw, 'bar', 'online');
@@ -94,7 +101,7 @@ describe('resolver provider fallback', () => {
   it('falls through providers in order: offline, cache, online', async () => {
     const calls: string[] = [];
     const offline: DictionaryProvider = {
-      lookup: async (q) => { calls.push('offline'); return null; },
+      lookup: async (_q) => { calls.push('offline'); return null; },
     };
     const online: DictionaryProvider = {
       lookup: async (q) => { calls.push('online'); return makeResult(q, 'online'); },

@@ -24,7 +24,10 @@ try {
   manifest.browser_specific_settings = {
     gecko: {
       id: 'etyr@etyr.app',
-      strict_min_version: '109.0',
+      strict_min_version: '112.0',
+      data_collection_permissions: {
+        required: ['websiteContent', 'searchTerms'],
+      },
     },
   };
 
@@ -43,8 +46,27 @@ try {
     delete manifest.options_page;
   }
 
+  if (manifest.action) {
+    manifest.action.theme_icons = [
+      { "light": "icons/icon-16.png", "dark": "icons/icon-white-16.png", "size": 16 },
+      { "light": "icons/icon-32.png", "dark": "icons/icon-white-32.png", "size": 32 },
+      { "light": "icons/icon-48.png", "dark": "icons/icon-white-48.png", "size": 48 },
+      { "light": "icons/icon-128.png", "dark": "icons/icon-white-128.png", "size": 128 }
+    ];
+  }
+
   if (manifest.content_security_policy) {
     delete manifest.content_security_policy;
+  }
+
+  // Firefox does not support chrome.sidePanel (MV3) — strip the manifest keys
+  // so the build loads without permission/path warnings. The side-panel
+  // button falls back to opening the page in a new tab.
+  if (manifest.permissions) {
+    manifest.permissions = manifest.permissions.filter((p) => p !== 'sidePanel');
+  }
+  if (manifest.side_panel) {
+    delete manifest.side_panel;
   }
 
   writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2));
