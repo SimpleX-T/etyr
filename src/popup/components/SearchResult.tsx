@@ -14,16 +14,9 @@ export async function speakPronunciation(
   query: string,
   result?: DictionaryResult,
 ): Promise<void> {
-  const response = await sendMessage<{ played?: boolean }>({
-    action: MESSAGE_ACTIONS.PRONUNCIATION_SPEAK,
-    payload: result ? { query, result } : { query },
-  });
-
-  if (response?.ok === false) return; // explicit rejection (disabled / unavailable)
-
-  if (response?.ok === true && (response.data as { played?: boolean })?.played) {
-    return;
-  }
+  // Respect user settings
+  const settingsRes = await sendMessage<Settings>({ action: MESSAGE_ACTIONS.SETTINGS_GET });
+  if (settingsRes?.data && !settingsRes.data.enablePronunciation) return;
 
   const pronunciation = new PronunciationService();
   try {

@@ -320,6 +320,34 @@ const handlers: Partial<Record<MessageAction, MessageHandler>> = {
     return { played: true };
   },
 
+  [MESSAGE_ACTIONS.PRONUNCIATION_FETCH]: async (payload) => {
+    const url = asString(unwrap(payload).url);
+    if (!url) throw new RouteError('INVALID_PAYLOAD', 'Field "url" is required');
+
+    try {
+      const response = await fetch(url, {
+        referrerPolicy: 'no-referrer',
+        credentials: 'omit',
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      
+      const buffer = await response.arrayBuffer();
+      const bytes = new Uint8Array(buffer);
+      let binary = '';
+      for (let i = 0; i < bytes.byteLength; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      const base64 = btoa(binary);
+      const mime = response.headers.get('content-type') || 'audio/mpeg';
+      return { dataUrl: `data:${mime};base64,${base64}` };
+    } catch (err) {
+      throw new RouteError('FETCH_FAILED', err instanceof Error ? err.message : 'Failed to proxy audio');
+    }
+  },
+
   [MESSAGE_ACTIONS.SIDEPANEL_OPEN]: async (payload, sender) => {
     const p = unwrap(payload);
     const query = asString(p.word) ?? asString(p.query) ?? undefined;
@@ -437,7 +465,27 @@ const runtime = getBrowserAPI().runtime as unknown as {
 };
 runtime.onInstalled?.addListener(() => {
   void installDefaults().catch(() => {});
+  
+  const scope = globalThis as typeof globalThis & { chrome?: typeof chrome };
+  if (scope.chrome?.contextMenus) {
+    scope.chrome.contextMenus.create({
+      id: 'etyr-define',
+      title: 'Define "%s" with Etyr',
+      contexts: ['selection']
+    });
+  }
 });
+
+const scope = globalThis as typeof globalThis & { chrome?: typeof chrome };
+if (scope.chrome?.contextMenus) {
+  scope.chrome.contextMenus.onClicked.addListener((info, tab) => {
+    if (info.menuItemId === 'etyr-define' && info.selectionText) {
+      const query = info.selectionText.trim();
+      if (!query) return;
+      void handlers[MESSAGE_ACTIONS.SIDEPANEL_OPEN]!({ word: query }, { tab });
+    }
+  });
+}
 
 getBrowserAPI().runtime.onMessage.addListener((message, sender) => {
   const request = normalizeRequest(message);

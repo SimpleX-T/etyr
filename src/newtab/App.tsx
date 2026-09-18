@@ -1,20 +1,17 @@
 import { useEffect, useState } from 'react';
-import type { SavedWord } from '@shared/types';
 import { getSettings } from '@storage/settings';
-import { getAllSavedWords } from '@storage/bookmarks';
 import { PronunciationService } from '@dictionary/pronunciation';
-import { Volume2, X, RefreshCw, Palette } from 'lucide-react';
+import { Volume2, X, RefreshCw, Palette, Flame } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useWordOfTheDay } from './useWordOfTheDay';
 
 export default function App() {
+  const { word, streak, loading: wotdLoading, refreshWord } = useWordOfTheDay();
   const [loading, setLoading] = useState(true);
-  const [words, setWords] = useState<SavedWord[]>([]);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [theme, setTheme] = useState<'notebook' | 'dark'>('notebook');
   const pronunciationService = new PronunciationService();
 
   useEffect(() => {
-    // Load theme from localStorage
     const savedTheme = localStorage.getItem('ntp_theme') as 'notebook' | 'dark';
     if (savedTheme) {
       setTheme(savedTheme);
@@ -22,7 +19,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    // Apply theme to body
     document.body.setAttribute('data-theme', theme);
     localStorage.setItem('ntp_theme', theme);
   }, [theme]);
@@ -35,23 +31,16 @@ export default function App() {
           window.location.href = 'chrome-search://local-ntp/local-ntp.html';
           return;
         }
-
-        const savedWords = await getAllSavedWords();
-        if (savedWords.length > 0) {
-          const randomIndex = Math.floor(Math.random() * savedWords.length);
-          setWords(savedWords);
-          setCurrentIndex(randomIndex);
-        }
       } catch (e) {
-        console.error('Failed to load Word of the Day', e);
+        console.error('Failed to load settings', e);
       } finally {
-        setLoading(false);
+        if (!wotdLoading) {
+          setLoading(false);
+        }
       }
     };
     void init();
-  }, []);
-
-  const word = words[currentIndex];
+  }, [wotdLoading]);
 
   const handlePronounce = async () => {
     if (!word) return;
@@ -70,29 +59,30 @@ export default function App() {
     }
   };
 
-  const nextWord = () => {
-    if (words.length > 1) {
-      let nextIndex;
-      do {
-        nextIndex = Math.floor(Math.random() * words.length);
-      } while (nextIndex === currentIndex);
-      setCurrentIndex(nextIndex);
-    }
-  };
-
   const toggleTheme = () => {
     setTheme(prev => (prev === 'notebook' ? 'dark' : 'notebook'));
   };
 
-  if (loading) {
+  if (loading || wotdLoading) {
     return <div className="ntp-loading"></div>;
   }
+
+  const isCurated = word?.id.startsWith('cw_');
 
   return (
     <div className="ntp-container">
       <div className="ntp-header-meta">
-        <span>Word of the Day</span>
-        <span>{words.length > 0 ? `01/${String(words.length).padStart(2, '0')} words` : ''}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span>Word of the Day</span>
+          {isCurated && <span style={{ opacity: 0.6, fontSize: '0.9em' }}>(Curated)</span>}
+        </div>
+        
+        {streak > 0 && (
+          <div className="ntp-streak" style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#f97316', fontWeight: 600, fontSize: '15px' }}>
+            <Flame size={18} fill="currentColor" />
+            <span>{streak} Day Streak</span>
+          </div>
+        )}
       </div>
 
       <AnimatePresence mode="wait">
@@ -104,14 +94,7 @@ export default function App() {
           transition={{ type: "spring", stiffness: 260, damping: 20 }}
           key={word ? word.word + theme : 'empty' + theme}
         >
-          {!word ? (
-            <>
-              <h1 className="ntp-card-empty-title">Nothing to see here.</h1>
-              <p className="ntp-card-empty-subtitle">
-                Keep reading. Save words to see them here.
-              </p>
-            </>
-          ) : (
+          {word && (
             <>
               <h1 className="ntp-word-title">{word.word}</h1>
               
@@ -152,13 +135,13 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, type: "spring", stiffness: 260, damping: 20 }}
         >
-          <button className="ntp-btn" aria-label="Close">
+          <button className="ntp-btn" aria-label="Close" onClick={() => window.location.href = 'chrome-search://local-ntp/local-ntp.html'}>
             <X size={24} strokeWidth={2.5} />
           </button>
           <button className="ntp-btn ntp-btn-primary" onClick={handlePronounce} aria-label="Pronounce">
             <Volume2 size={32} strokeWidth={2.5} />
           </button>
-          <button className="ntp-btn" onClick={nextWord} aria-label="Next Word">
+          <button className="ntp-btn" onClick={refreshWord} aria-label="Next Word">
             <RefreshCw size={24} strokeWidth={2.5} />
           </button>
         </motion.div>

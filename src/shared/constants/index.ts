@@ -48,6 +48,7 @@ export const MESSAGE_ACTIONS = {
   SAVED_CLEAR: 'SAVED_CLEAR' as const,
   CONTENT_INIT: 'CONTENT_INIT' as const,
   PRONUNCIATION_SPEAK: 'PRONUNCIATION_SPEAK' as const,
+  PRONUNCIATION_FETCH: 'PRONUNCIATION_FETCH' as const,
   STATS_GET: 'STATS_GET' as const,
   STATS_RECORD_REVIEW: 'STATS_RECORD_REVIEW' as const,
   SIDEPANEL_OPEN: 'SIDEPANEL_OPEN' as const,
@@ -63,6 +64,10 @@ export const STORAGE_KEYS = {
   STATS: 'etyr_stats',
   SIDEPANEL_LAST_QUERY: 'etyr_sidepanel_last_query',
   SIDEPANEL_ACTIVE: 'etyr_sidepanel_active',
+  WOTD_DATE: 'etyr_wotd_date',
+  WOTD_WORD: 'etyr_wotd_word',
+  STREAK_COUNT: 'etyr_streak_count',
+  LAST_ACTIVE_DATE: 'etyr_last_active_date',
 } as const;
 
 export const PUNCTUATION_REGEX = /^[^\w]+$/;

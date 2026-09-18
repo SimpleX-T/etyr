@@ -49,6 +49,7 @@ body {
   width: 100%;
   min-height: 380px;
   background: #fffdf5;
+  color: #222;
   border: 2px dashed #dcb77c;
   border-radius: 8px;
   box-shadow: 
@@ -94,6 +95,7 @@ body {
   font-size: 64px;
   font-weight: 700;
   margin-bottom: 12px;
+  color: #111;
   line-height: 1;
 }
 
